@@ -15,13 +15,17 @@ const ProductsDetails = () => {
         dispatch(deleteProduct(id));
     }, [dispatch]);
 
+    const handleEdit = useCallback((product) => {
+        // dispatch(action(product));
+    } ,[] );
+
     return (
         <div className='productsPage w-100'>
             <GoToButton url={"/"} />
             <div className=' d-flex flex-wrap gap-4 my-5'>
                 {productsList.length > 0 && productsList.map((product, index) => {
                     return (
-                        <ProductCard product={product} key={product.id} onDelete={handleDelete}/>
+                        <ProductCard product={product} key={product.id} onDelete={handleDelete} onEdit={handleEdit}/>
                     )
                 })}
             </div>
