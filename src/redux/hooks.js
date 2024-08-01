@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectInvoiceList } from "./invoicesSlice";
+import {selectProductList} from './productsSlice';
 
 export const useInvoiceListData = () => {
   const invoiceList = useSelector(selectInvoiceList);
@@ -20,3 +21,13 @@ export const useInvoiceListData = () => {
     listSize,
   };
 };
+
+export const useProductListData = () => {
+  const products = useSelector(selectProductList); 
+
+
+  return {
+    productsList : products.products,
+  }
+};
+

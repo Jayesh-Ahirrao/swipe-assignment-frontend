@@ -92,3 +92,8 @@ hr {
   -ms-user-select: none;
   user-select: none;
 }
+
+.productsPage{
+  height: 100vh;
+  margin: 1rem 0;
+}
