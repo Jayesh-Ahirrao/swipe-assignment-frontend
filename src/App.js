@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import { Route, Routes } from "react-router-dom";
 import Invoice from "./pages/Invoice";
 import InvoiceList from "./pages/InvoiceList";
+import ProductsDetails from "./pages/ProductsDetails";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/create" element={<Invoice />} />
           <Route path="/create/:id" element={<Invoice />} />
           <Route path="/edit/:id" element={<Invoice />} />
+          <Route path="/products" element={<ProductsDetails />} />
         </Routes>
       </Container>
     </div>

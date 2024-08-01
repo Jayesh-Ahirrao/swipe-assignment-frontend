@@ -7,13 +7,13 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import InvoiceItem from "./InvoiceItem";
 import InvoiceModal from "./InvoiceModal";
-import { BiArrowBack } from "react-icons/bi";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import {  useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
+import GoToButton from "../UI/GoToButton";
 
 const InvoiceForm = () => {
   const dispatch = useDispatch();
@@ -185,14 +185,7 @@ const InvoiceForm = () => {
 
   return (
     <Form onSubmit={openModal}>
-      <div className="d-flex align-items-center">
-        <BiArrowBack size={18} />
-        <div className="fw-bold mt-1 mx-2 cursor-pointer">
-          <Link to="/">
-            <h5>Go Back</h5>
-          </Link>
-        </div>
-      </div>
+      <GoToButton url={'/'} />
 
       <Row>
         <Col md={8} lg={9}>
