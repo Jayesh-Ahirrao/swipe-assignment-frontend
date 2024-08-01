@@ -22,12 +22,13 @@ export const useInvoiceListData = () => {
   };
 };
 
-export const useProductListData = () => {
+export const useProductListData = (initialData = []) => {
   const products = useSelector(selectProductList); 
 
+  const data = products.products.length > 0 ? products.products : initialData;
 
   return {
-    productsList : products.products,
+    productsList : data,
   }
 };
 
