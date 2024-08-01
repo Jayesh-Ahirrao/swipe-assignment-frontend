@@ -1,0 +1,1 @@
+Add Toast on every alert message

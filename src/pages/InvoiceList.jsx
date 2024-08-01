@@ -12,8 +12,11 @@ import { deleteInvoice } from "../redux/invoicesSlice";
 const InvoiceList = () => {
   const { invoiceList, getOneInvoice } = useInvoiceListData();
   const isListEmpty = invoiceList.length === 0;
+
   const [copyId, setCopyId] = useState("");
   const navigate = useNavigate();
+
+  // TODO: use toast instead of alert
   const handleCopyClick = () => {
     const invoice = getOneInvoice(copyId);
     if (!invoice) {
