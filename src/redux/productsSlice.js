@@ -12,6 +12,9 @@ const productsSlice = createSlice({
         addProduct: (state, action) => {
             // testing 
             state.products.push(action.payload);
+        },
+        deleteProduct: (state, action) => {
+            state.products = state.products.filter(product => product.id !== action.payload);
         }
     },
 });
@@ -21,4 +24,4 @@ export const selectProductList = (state) => state.products;//
 
 
 export default productsSlice.reducer;
-export const {addProduct} = productsSlice.actions;
+export const {addProduct, deleteProduct} = productsSlice.actions;
