@@ -20,7 +20,7 @@ const ProductsDetails = () => {
 
     return (
         <div className='productsPage w-100'>
-            <GoToButton url={"/"} />
+            <GoToButton url={"/"} text={'Go Back'}/>
             <div className=' d-flex flex-wrap gap-4 my-5'>
                 {productsList.length > 0 && productsList.map((product, index) => {
                     return (

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useInvoiceListData } from "../redux/hooks";
 import { useDispatch } from "react-redux";
 import { deleteInvoice } from "../redux/invoicesSlice";
+import GoToButton from "../UI/GoToButton";
 
 const InvoiceList = () => {
   const { invoiceList, getOneInvoice } = useInvoiceListData();
@@ -34,9 +35,10 @@ const InvoiceList = () => {
           {isListEmpty ? (
             <div className="d-flex flex-column align-items-center">
               <h3 className="fw-bold pb-2 pb-md-4">No invoices present</h3>
-              <Link to="/create">
-                <Button variant="primary">Create Invoice</Button>
-              </Link>
+              <div className="d-flex">
+                <GoToButton url={'/products'} text="Products" />
+                <GoToButton url={'/create'} text="Create Invoice" />
+              </div>
             </div>
           ) : (
             <div className="d-flex flex-column">

@@ -1,16 +1,14 @@
 import { BiArrowBack } from "react-icons/bi";
+import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
 
-const GoToButton = ({ url }) => {
+const GoToButton = ({ url, text, type = "primary" }) => {
     return (
         <Link to={url}>
-            <div className="d-flex align-items-center">
-                <BiArrowBack size={18} />
-                <div className="fw-bold mt-1 mx-2 cursor-pointer">
-                    <h5>Go Back</h5>
-                </div>
-            </div>
+                <Button className="fw-bold mt-1 mx-2 cursor-pointer">
+                    {text}
+                </Button>
         </Link>
     )
 }

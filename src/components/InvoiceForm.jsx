@@ -185,7 +185,7 @@ const InvoiceForm = () => {
 
   return (
     <Form onSubmit={openModal}>
-      <GoToButton url={'/'} />
+      <GoToButton url={'/'} text={'Go Back'} />
 
       <Row>
         <Col md={8} lg={9}>
