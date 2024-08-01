@@ -3,6 +3,7 @@ import GoToButton from '../UI/GoToButton';
 import { useProductListData } from '../redux/hooks';
 import ProductCard from '../components/ProductCard';
 import { useDispatch } from 'react-redux';
+import { deleteProduct } from '../redux/productsSlice';
 
 // TODO: if you have time add a create product option next to goto btn
 const ProductsDetails = () => {
@@ -11,8 +12,8 @@ const ProductsDetails = () => {
 
 
     const handleDelete = useCallback((id) => {
-        
-    }, []);
+        dispatch(deleteProduct(id));
+    }, [dispatch]);
 
     return (
         <div className='productsPage w-100'>
@@ -20,7 +21,7 @@ const ProductsDetails = () => {
             <div className=' d-flex flex-wrap gap-4 my-5'>
                 {productsList.length > 0 && productsList.map((product, index) => {
                     return (
-                        <ProductCard product={product} key={product.id} />
+                        <ProductCard product={product} key={product.id} onDelete={handleDelete}/>
                     )
                 })}
             </div>

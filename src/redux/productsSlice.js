@@ -20,7 +20,7 @@ const productsSlice = createSlice({
 });
 
 
-export const selectProductList = (state) => state.products;//
+export const selectProductList = (state) => state.products;
 
 
 export default productsSlice.reducer;
