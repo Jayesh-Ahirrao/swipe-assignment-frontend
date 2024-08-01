@@ -33,10 +33,10 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
         return (
             <div>
                 <Button variant='secondary' onClick={handleModalClose} className='mx-2 py-2 rounded-5' >Close</Button>
-                <Button variant='primary' onClick={handleModalSave}className='py-2 px-3 rounded-5' >Save</Button>
+                <Button variant='primary' onClick={() => handleModalSave(editedProduct)}className='py-2 px-3 rounded-5' >Save</Button>
             </div>
         )
-    }, [handleModalClose, handleModalSave]);
+    }, [editedProduct, handleModalClose, handleModalSave]);
 
     return (
         <>

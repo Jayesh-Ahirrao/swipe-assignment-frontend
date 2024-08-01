@@ -15,7 +15,10 @@ const productsSlice = createSlice({
         },
         deleteProduct: (state, action) => {
             state.products = state.products.filter(product => product.id !== action.payload);
-        }
+        },
+        updateProduct: (state, action) => {
+            state.products = state.products.map(product => product.id === action.payload.id ? action.payload : product);
+        },
     },
 });
 
@@ -24,4 +27,4 @@ export const selectProductList = (state) => state.products;
 
 
 export default productsSlice.reducer;
-export const {addProduct, deleteProduct} = productsSlice.actions;
+export const {addProduct, deleteProduct, updateProduct} = productsSlice.actions;
