@@ -6,6 +6,10 @@ import { Route, Routes } from "react-router-dom";
 import Invoice from "./pages/Invoice";
 import InvoiceList from "./pages/InvoiceList";
 import ProductsDetails from "./pages/ProductsDetails";
+import { Toaster } from 'react-hot-toast';
+
+
+
 
 const App = () => {
   return (
@@ -18,7 +22,9 @@ const App = () => {
           <Route path="/edit/:id" element={<Invoice />} />
           <Route path="/products" element={<ProductsDetails />} />
         </Routes>
+        <Toaster />
       </Container>
+
     </div>
   );
 };
