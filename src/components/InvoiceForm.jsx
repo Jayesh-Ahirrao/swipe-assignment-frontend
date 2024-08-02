@@ -80,8 +80,9 @@ const InvoiceForm = () => {
     handleCalculateTotal();
   };
 
-  const handleAddEvent = () => {
+  const handleAddEvent = (selectedProduct = null) => {
     const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+
     const newItem = {
       itemId: id,
       itemName: "",
@@ -90,6 +91,16 @@ const InvoiceForm = () => {
       itemQuantity: 1,
       category: "", //you can keep goods as a default category
     };
+
+    if (selectedProduct) {
+
+      newItem.itemId = selectedProduct.id;
+      newItem.itemName = selectedProduct.name;
+      newItem.itemDescription = selectedProduct.description;
+      newItem.itemPrice = selectedProduct.price;
+      newItem.category = selectedProduct.category;
+    }
+
     //TODO: setup item validation here
     setFormData({
       ...formData,

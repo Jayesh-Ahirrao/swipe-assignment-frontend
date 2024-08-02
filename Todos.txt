@@ -9,6 +9,16 @@ Done    adds invoice without any fields ==> add validation
 Done    discounts is taking negatuve values but when reviewing it shows the error 
 Done    all the inputs already has required fields so only need to provide validation on when invoice is created
 
-        as uuid can be difficult for user to enter - give suggestions in input box for copyId        
+        as uuid can be difficult for user to enter - give suggestions in input box for copyId  
+              
         Convert currency to selected currency by user
         when u custom visit /edit/45 it gives error
+
+        Dynamic Invoices updates on products updates
+        
+        Field Update should update the products state   ==> should be done on sacing the invoice to avoid unnecessary state updates
+
+Done    products should be directly copied to the fields on select
+
+
+        try to update fn params to get state as params and not global obj
