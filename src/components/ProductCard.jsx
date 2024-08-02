@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import validateProduct from '../utils/validateProduct.js'
+import {validateProduct} from '../utils/validations.js'
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import ProductModal from './ProductModal'
 
 
 const ProductCard = ({ product, onDelete, onEdit }) => {
-    console.log("parent card rendering nowwwwwwwwwww");
+    console.log("parent card rendering nowwwwwwwwwww PRODUCT" , product);
     const [showModal, setShowModal] = useState(false);
     const [editedProduct, setEditedProduct] = useState({ ...product });
 

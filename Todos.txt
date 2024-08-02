@@ -2,7 +2,6 @@ Add Toast on every alert message
 Numeric validation and calculations
 invoice validation
 
-
 add products btn when list of invoices shown too
 as uuid can be difficult for user to enter - give suggestions in input box for copyId
 
@@ -10,11 +9,13 @@ as uuid can be difficult for user to enter - give suggestions in input box for c
 
 changes in form
 
-        invoice number in update doesnt work.
+Done    invoice number in update doesnt work.
+done    generate uuid as random can give same id 
+
         adds invoice without any fields ==> add validation
         discounts is taking negatuve values but when reviewing it shows the error 
+        
         Convert currency to selected currency by user
-done    generate uuid as random can give same id 
 
         all the inputs already has required fields so only need to provide validation on when invoice is created
 

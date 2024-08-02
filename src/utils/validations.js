@@ -1,4 +1,4 @@
-const validateProduct = (product) => {
+export const validateProduct = (product) => {
     const res = {
         passed: false,
         message: "",
@@ -25,7 +25,6 @@ const validateProduct = (product) => {
     return res;
 }
 
-export default validateProduct;
 
 
 

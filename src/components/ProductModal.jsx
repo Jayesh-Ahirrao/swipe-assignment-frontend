@@ -9,7 +9,7 @@ import React from "react";
 
 const ProductModal = ({ show, title, product, onClose, onSave, isCreateModal = false }) => {
     const options = ['goods', 'services'];
-    console.log("ProductModal redered================================");
+
     const formRef = useRef({ ...product });
 
     const handleInputChnage = useCallback((event) => {
@@ -21,10 +21,7 @@ const ProductModal = ({ show, title, product, onClose, onSave, isCreateModal = f
         formRef.current = { ...product };
     }, [product]);
 
-    useEffect(() => {
-        // to erase the form after adding new product
-        formRef.current = {};   
-    }, [show]);
+    console.log("ProductModal ref.current================================", formRef.current);
 
     return (
         <Modal show={show} onHide={onClose}>
