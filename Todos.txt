@@ -12,12 +12,13 @@ changes in form
 Done    invoice number in update doesnt work.
 done    generate uuid as random can give same id 
 
-        adds invoice without any fields ==> add validation
-        discounts is taking negatuve values but when reviewing it shows the error 
+Done    adds invoice without any fields ==> add validation
+Done    discounts is taking negatuve values but when reviewing it shows the error 
+Done    all the inputs already has required fields so only need to provide validation on when invoice is created
+
         
         Convert currency to selected currency by user
 
-        all the inputs already has required fields so only need to provide validation on when invoice is created
 
 
 
