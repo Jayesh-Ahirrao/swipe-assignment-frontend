@@ -1,49 +1,44 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import { BiTrash } from "react-icons/bi";
-import EditableField from "./EditableField";
-import { CATEGORIES } from "../constants/categories";
-import SelectBasicExample from "../UI/Select";
+const formdata ={
+    "id": 41,
+    "currentDate": "8/2/2024",
+    "invoiceNumber": 3,
+    "dateOfIssue": "2024-08-29",
+    "billTo": "Jayesh Ahirrao",
+    "billToEmail": "ahirraojayesh88@gmail.com",
+    "billToAddress": "44, shri nivas bhau nagar, kajgaon road, New new post office",
+    "billFrom": "Jayesh Ahirrao",
+    "billFromEmail": "ahirraojayesh88@gmail.com",
+    "billFromAddress": "44, shri nivas bhau nagar, kajgaon road, New new post office",
+    "notes": "",
+    "total": "4.32",
+    "subTotal": "4.00",
+    "taxRate": "8",
+    "taxAmount": "0.32",
+    "discountRate": "0.03",
+    "discountAmount": "0.00",
+    "currency": "₿",
+    "items": [
+        {
+            "itemId": 0,
+            "itemName": "XYZ",
+            "itemDescription": "asd",
+            "itemPrice": "4",
+            "itemQuantity": 1
+        }
+    ]
+}
 
-const options = [CATEGORIES.GOODS, CATEGORIES.SERVICES];
+// const [currItem, setCurrItem] = useState({
+//     id: "",
+//     name: "",
+//     description: "",
+//     price: "",
+//     category: ""
+//   });
 
-const InvoiceItem = (props) => {
-  const { onItemizedItemEdit, currency, onRowDel, items = [], onRowAdd } = props;
 
-  // console.log("iTEMS",items)
 
-  const itemTable = items.map((item, index) => (
-    <ItemRow
-      key={index} //using it as we have no option for empty arrays
-      item={item}
-      onDelEvent={onRowDel}
-      onItemizedItemEdit={onItemizedItemEdit}
-      currency={currency}
-    />
-  ));
-
-  return (
-    <div>
-      <Table>
-        <thead>
-          <tr>
-            <th>ITEM</th>
-            <th>QTY</th>
-            <th>PRICE/RATE</th>
-            <th className="text-center">ACTION</th>
-          </tr>
-        </thead>
-        <tbody>{itemTable}</tbody>
-      </Table>
-      <Button className="fw-bold" onClick={onRowAdd}>
-        Add Item
-      </Button>
-    </div>
-  );
-};
-
+/*
 const ItemRow = (props) => {
   const onDelEvent = () => {
     props.onDelEvent(props.item);
@@ -90,7 +85,6 @@ const ItemRow = (props) => {
             id: props.item.itemId,
           }}
         />
-
       </td>
       <td style={{ minWidth: "130px" }}>
         <EditableField
@@ -109,12 +103,6 @@ const ItemRow = (props) => {
             id: props.item.itemId,
           }}
         />
-
-        <SelectBasicExample
-          name="category"
-          options={options}
-          value={props.item.category} onItemizedItemEdit={(evt) => props.onItemizedItemEdit(evt, props.item.itemId)} />
-
       </td>
       <td className="text-center" style={{ minWidth: "50px" }}>
         <BiTrash
@@ -126,5 +114,4 @@ const ItemRow = (props) => {
     </tr>
   );
 };
-
-export default InvoiceItem;
+*/
