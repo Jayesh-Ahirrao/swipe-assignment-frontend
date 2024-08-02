@@ -75,7 +75,10 @@ const InvoiceModal = (props) => {
                 <div>{props.info.dateOfIssue || ""}</div>
               </Col>
             </Row>
-            <Table className="mb-0">
+
+
+            <h6 className="table-heading">Goods bill:</h6>
+            <Table className="mb-5">
               <thead>
                 <tr>
                   <th>QTY</th>
@@ -101,8 +104,55 @@ const InvoiceModal = (props) => {
                     </tr>
                   );
                 })}
+                <tr className="text-end">
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td className="fw-bold" style={{ width: "100px" }}>Goods Total: </td>
+                  {/* calculate individual contributions later on */}
+                  <td className="text-end" style={{ width: "100px" }}>{props.currency} {props.total}</td>
+                </tr>
               </tbody>
             </Table>
+
+
+            <h6 className="table-heading">Services bill:</h6>
+            <Table className="mb-0">
+
+              <thead>
+                <tr>
+                  <th>QTY</th>
+                  <th>DESCRIPTION</th>
+                  <th className="text-end">PRICE</th>
+                  <th className="text-end">AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {props.items.map((item, i) => {
+                  return (
+                    <tr id={i} key={i}>
+                      <td style={{ width: "70px" }}>{item.itemQuantity}</td>
+                      <td>
+                        {item.itemName} - {item.itemDescription}
+                      </td>
+                      <td className="text-end" style={{ width: "100px" }}>
+                        {props.currency} {item.itemPrice}
+                      </td>
+                      <td className="text-end" style={{ width: "100px" }}>
+                        {props.currency} {item.itemPrice * item.itemQuantity}
+                      </td>
+                    </tr>
+                  );
+                })}
+                <tr className="text-end">
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td className="fw-bold" style={{ width: "100px" }}>Service Total: </td>
+                  {/* calculate individual contributions later on */}
+                  <td className="text-end" style={{ width: "100px" }}>{props.currency} {props.total}</td>
+                </tr>
+              </tbody>
+            </Table>
+
             <Table>
               <tbody>
                 <tr>
@@ -116,7 +166,7 @@ const InvoiceModal = (props) => {
                     TAX
                   </td>
                   <td className="text-end" style={{ width: "100px" }}>
-                    {props.currency} {props.taxAmmount}
+                    {props.currency} {props.taxAmmount ? props.taxAmmount : "0.0"}
                   </td>
                 </tr>
                 {props.discountAmmount !== 0.0 && (
@@ -126,16 +176,16 @@ const InvoiceModal = (props) => {
                       DISCOUNT
                     </td>
                     <td className="text-end" style={{ width: "100px" }}>
-                      {props.currency} {props.discountAmmount}
+                      {props.currency} {props.discountAmmount ? props.discountAmmount : "0.0"}
                     </td>
                   </tr>
                 )}
                 <tr className="text-end">
                   <td></td>
-                  <td className="fw-bold" style={{ width: "100px" }}>
+                  <td className="fw-bold" style={{ width: "100px",color: "#1E90FF"  }}>
                     TOTAL
                   </td>
-                  <td className="text-end" style={{ width: "100px" }}>
+                  <td className="text-end fw-bold" style={{ width: "100px", color: "#1E90FF"  }}>
                     {props.currency} {props.total}
                   </td>
                 </tr>
@@ -148,6 +198,9 @@ const InvoiceModal = (props) => {
             )}
           </div>
         </div>
+
+
+
         <div className="pb-4 px-4">
           <Row>
             <Col md={6}>
