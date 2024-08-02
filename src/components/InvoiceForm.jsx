@@ -106,10 +106,10 @@ const InvoiceForm = () => {
     console.log("FROM ADDING NEEW PROD", newItem);
 
     //TODO: setup item validation here
-    setFormData({
-      ...formData,
-      items: [...formData.items, newItem],
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      items: [...prevFormData.items, newItem],
+    }));
     handleCalculateTotal();
   };
 

@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { updateProduct } from "./productsSlice";
+
 
 const invoicesSlice = createSlice({
   name: "invoices",
@@ -27,6 +29,22 @@ const invoicesSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+
+    builder.addCase(updateProduct , (state, action) => {
+
+      state.forEach((invoice) => {
+
+        const productIndex = invoice.items.findIndex((record) =>  record.id == action.payload.id);
+
+        if(productIndex !== -1) {
+          // this is to retain the quanity field which is present in items not in products
+          invoice.items[productIndex] = {...invoice.items[productIndex], ...action.payload }
+        }
+      })
+
+    });
+  }
 });
 
 export const {
