@@ -42,11 +42,12 @@ const InvoiceList = () => {
             </div>
           ) : (
             <div className="d-flex flex-column">
-              <div className="d-flex flex-row align-items-center justify-content-between">
+              <div className="d-flex flex-row align-items-start justify-content-between">
                 <h3 className="fw-bold pb-2 pb-md-4">Invoice List</h3>
-                <Link to="/create">
-                  <Button variant="primary mb-2 mb-md-4">Create Invoice</Button>
-                </Link>
+                <div className="d-flex">
+                  <GoToButton url={'/products'} text="Products" />
+                  <GoToButton url={'/create'} text="Create Invoice" />
+                </div>
 
                 <div className="d-flex gap-2">
                   <Button variant="dark mb-2 mb-md-4" onClick={handleCopyClick}>
@@ -163,6 +164,8 @@ const InvoiceRow = ({ invoice, navigate }) => {
           notes: invoice.notes,
           total: invoice.total,
           subTotal: invoice.subTotal,
+          goodsTotal: invoice.goodsTotal,
+          serviceTotal: invoice.serviceTotal,
           taxRate: invoice.taxRate,
           taxAmount: invoice.taxAmount,
           discountRate: invoice.discountRate,
@@ -171,6 +174,9 @@ const InvoiceRow = ({ invoice, navigate }) => {
         items={invoice.items}
         currency={invoice.currency}
         subTotal={invoice.subTotal}
+        goodsTotal={invoice.goodsTotal}
+        serviceTotal={invoice.serviceTotal}
+        category={invoice.category}
         taxAmount={invoice.taxAmount}
         discountAmount={invoice.discountAmount}
         total={invoice.total}

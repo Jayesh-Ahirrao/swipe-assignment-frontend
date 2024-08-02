@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import { BiPaperPlane, BiCloudDownload } from "react-icons/bi";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { CATEGORIES } from "../constants/categories";
 
 const GenerateInvoice = () => {
   html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
@@ -27,6 +28,9 @@ const GenerateInvoice = () => {
 };
 
 const InvoiceModal = (props) => {
+
+  console.log("From model incvoice", props);
+
   return (
     <div>
       <Modal
@@ -44,9 +48,9 @@ const InvoiceModal = (props) => {
               <h4 className="fw-bold my-2">
                 {props.info.billFrom || "John Uberbacher"}
               </h4>
-              <h7 className="fw-bold text-secondary mb-1">
+              <h6 className="fw-bold text-secondary mb-1">
                 Invoice No.: {props.info.invoiceNumber || ""}
-              </h7>
+              </h6>
             </div>
             <div className="text-end ms-4">
               <h6 className="fw-bold mt-1 mb-2">Amount&nbsp;Due:</h6>
@@ -75,7 +79,10 @@ const InvoiceModal = (props) => {
                 <div>{props.info.dateOfIssue || ""}</div>
               </Col>
             </Row>
-            <Table className="mb-0">
+
+
+            <h6 className="table-heading">Goods bill:</h6>
+            <Table className="mb-5">
               <thead>
                 <tr>
                   <th>QTY</th>
@@ -85,24 +92,74 @@ const InvoiceModal = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {props.items.map((item, i) => {
-                  return (
-                    <tr id={i} key={i}>
-                      <td style={{ width: "70px" }}>{item.itemQuantity}</td>
-                      <td>
-                        {item.itemName} - {item.itemDescription}
-                      </td>
-                      <td className="text-end" style={{ width: "100px" }}>
-                        {props.currency} {item.itemPrice}
-                      </td>
-                      <td className="text-end" style={{ width: "100px" }}>
-                        {props.currency} {item.itemPrice * item.itemQuantity}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {props.items.map((item, i) =>
+                  item.category === CATEGORIES.GOODS ?
+                    (
+                      <tr id={i} key={i}>
+                        <td style={{ width: "70px" }}>{item.itemQuantity}</td>
+                        <td>
+                          {item.itemName} - {item.itemDescription}
+                        </td>
+                        <td className="text-end" style={{ width: "100px" }}>
+                          {props.currency} {item.itemPrice}
+                        </td>
+                        <td className="text-end" style={{ width: "100px" }}>
+                          {props.currency} {item.itemPrice * item.itemQuantity}
+                        </td>
+                      </tr>
+                    ) :
+                    null
+                )}
+                <tr className="text-end">
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td className="fw-bold" style={{ width: "100px" }}>Goods Total: </td>
+                  {/* calculate individual contributions later on */}
+                  <td className="text-end" style={{ width: "100px" }}>{props.currency} {props.goodsTotal}</td>
+                </tr>
               </tbody>
             </Table>
+
+            <h6 className="table-heading">Services bill:</h6>
+            <Table className="mb-0">
+
+              <thead>
+                <tr>
+                  <th>QTY</th>
+                  <th>DESCRIPTION</th>
+                  <th className="text-end">PRICE</th>
+                  <th className="text-end">AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {props.items.map((item, i) =>
+                  item.category === CATEGORIES.SERVICES ?
+                    (
+                      <tr id={i} key={i}>
+                        <td style={{ width: "70px" }}>{item.itemQuantity}</td>
+                        <td>
+                          {item.itemName} - {item.itemDescription}
+                        </td>
+                        <td className="text-end" style={{ width: "100px" }}>
+                          {props.currency} {item.itemPrice}
+                        </td>
+                        <td className="text-end" style={{ width: "100px" }}>
+                          {props.currency} {item.itemPrice * item.itemQuantity}
+                        </td>
+                      </tr>
+                    ) :
+                    null
+                )}
+                <tr className="text-end">
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td className="fw-bold" style={{ width: "100px" }}>Service Total: </td>
+                  {/* calculate individual contributions later on */}
+                  <td className="text-end" style={{ width: "100px" }}>{props.currency} {props.serviceTotal}</td>
+                </tr>
+              </tbody>
+            </Table>
+
             <Table>
               <tbody>
                 <tr>
@@ -116,7 +173,7 @@ const InvoiceModal = (props) => {
                     TAX
                   </td>
                   <td className="text-end" style={{ width: "100px" }}>
-                    {props.currency} {props.taxAmmount}
+                    {props.currency} {props.taxAmmount ? props.taxAmmount : "0.0"}
                   </td>
                 </tr>
                 {props.discountAmmount !== 0.0 && (
@@ -126,16 +183,16 @@ const InvoiceModal = (props) => {
                       DISCOUNT
                     </td>
                     <td className="text-end" style={{ width: "100px" }}>
-                      {props.currency} {props.discountAmmount}
+                      {props.currency} {props.discountAmmount ? props.discountAmmount : "0.0"}
                     </td>
                   </tr>
                 )}
                 <tr className="text-end">
                   <td></td>
-                  <td className="fw-bold" style={{ width: "100px" }}>
+                  <td className="fw-bold" style={{ width: "100px", color: "#1E90FF" }}>
                     TOTAL
                   </td>
-                  <td className="text-end" style={{ width: "100px" }}>
+                  <td className="text-end fw-bold" style={{ width: "100px", color: "#1E90FF" }}>
                     {props.currency} {props.total}
                   </td>
                 </tr>
@@ -148,6 +205,9 @@ const InvoiceModal = (props) => {
             )}
           </div>
         </div>
+
+
+
         <div className="pb-4 px-4">
           <Row>
             <Col md={6}>

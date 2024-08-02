@@ -97,3 +97,16 @@ hr {
   height: 100vh;
   margin: 1rem auto;
 }
+
+.table-heading{
+  margin-top: 2rem;
+  /* color: #0B5ED7; */
+  background-color: rgba(255, 228, 196, 0.3); 
+
+  color: #1E90FF;
+  /* background-color: rgba(214, 215, 207, 0.4); */
+  padding: 5px;
+  /* display: inline-block; */
+  border-radius: 5px;
+  font-weight: bold;
+}
