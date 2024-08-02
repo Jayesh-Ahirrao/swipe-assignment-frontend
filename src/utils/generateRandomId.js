@@ -1,7 +1,8 @@
-const generateRandomId = () => {
-  const randomNumber = Math.floor(Math.random() * 100);
+import { v4 } from 'uuid';
 
-  return randomNumber;
+
+const generateRandomId = () => {
+  return v4();
 };
 
 export default generateRandomId;
