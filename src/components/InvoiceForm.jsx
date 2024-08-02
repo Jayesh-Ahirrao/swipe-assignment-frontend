@@ -14,6 +14,11 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
 import GoToButton from "../UI/GoToButton";
+import { validateInvoice } from '../utils/validations';
+import showToast from '../utils/showToast.js';
+import { TOASTVARIANTS } from '../constants/toastVariants.js';
+
+
 
 const InvoiceForm = () => {
   const dispatch = useDispatch();
@@ -25,7 +30,7 @@ const InvoiceForm = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [copyId, setCopyId] = useState("");
-  const { getOneInvoice, listSize } = useInvoiceListData();
+  const { getOneInvoice, listSize, invoiceList } = useInvoiceListData();
   const [formData, setFormData] = useState(
     isEdit
       ? getOneInvoice(params.id)
@@ -153,6 +158,14 @@ const InvoiceForm = () => {
   };
 
   const handleAddInvoice = () => {
+    const res = validateInvoice(formData, invoiceList);
+
+    if (!res.passed) {
+      showToast(res.message);
+      return;
+    }
+    showToast("Invoice added successfully", TOASTVARIANTS.success);
+
     if (isEdit) {
       dispatch(updateInvoice({ id: params.id, updatedInvoice: formData }));
       alert("Invoice updated successfuly 🥳");
