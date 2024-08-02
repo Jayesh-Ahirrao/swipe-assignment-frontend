@@ -15,7 +15,7 @@ export const useInvoiceListData = () => {
 
   const listSize = invoiceList.length;
 
-  console.log("invoicelist", invoiceList);
+  // console.log("invoicelist", invoiceList);
 
   return {
     invoiceList,

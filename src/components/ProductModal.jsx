@@ -21,7 +21,7 @@ const ProductModal = ({ show, title, product, onClose, onSave, isCreateModal = f
         formRef.current = { ...product };
     }, [product]);
 
-    console.log("ProductModal ref.current================================", formRef.current);
+    // console.log("ProductModal ref.current================================", formRef.current);
 
     return (
         <Modal show={show} onHide={onClose}>

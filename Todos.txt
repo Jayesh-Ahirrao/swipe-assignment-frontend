@@ -10,7 +10,8 @@ Done    discounts is taking negatuve values but when reviewing it shows the erro
 Done    all the inputs already has required fields so only need to provide validation on when invoice is created
 Done    products should be directly copied to the fields on select
 
-Done    Field Update should update the products state   ==> should be done on saving the invoice to avoid unnecessary state updates
+Done    Field Update from invoice form should update the products state   
+        ==> should be done on saving the invoice to avoid unnecessary state updates
         it will also save us from performing validations again
 
 
@@ -20,7 +21,7 @@ Done    Field Update should update the products state   ==> should be done on sa
                         
                         when u custom visit /edit/45 it gives error
 
-High priority   Dynamic Invoices updates on products updates
+High priority       Dynamic Invoices updates on products updates
 
                         try to update fn params to get state as params and not global obj
                         

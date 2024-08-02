@@ -54,7 +54,7 @@ const InvoiceItem = (props) => {
 
       <Dropdown as={ButtonGroup} onSelect={handleProductAdd}>
 
-        <Button className="fw-bold" onClick={onRowAdd}>
+        <Button className="fw-bold" onClick={() =>  onRowAdd()}>
           Add Item
         </Button>
         <Dropdown.Toggle variant="warning" split id="dropdown-custom-2" />

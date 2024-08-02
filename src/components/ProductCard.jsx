@@ -8,7 +8,7 @@ import ProductModal from './ProductModal'
 
 
 const ProductCard = ({ product, onDelete, onEdit }) => {
-    console.log("parent card rendering nowwwwwwwwwww PRODUCT" , product);
+    // console.log("parent card rendering nowwwwwwwwwww PRODUCT" , product);
     const [showModal, setShowModal] = useState(false);
     const [editedProduct, setEditedProduct] = useState({ ...product });
 

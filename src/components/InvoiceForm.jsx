@@ -94,6 +94,7 @@ const InvoiceForm = () => {
     };
 
     if (selectedProduct) {
+      console.log("FROM ADDING NEEW PROD inside if", newItem);
 
       newItem.itemId = selectedProduct.id;
       newItem.itemName = selectedProduct.name;
@@ -101,6 +102,8 @@ const InvoiceForm = () => {
       newItem.itemPrice = selectedProduct.price;
       newItem.category = selectedProduct.category;
     }
+
+    console.log("FROM ADDING NEEW PROD", newItem);
 
     //TODO: setup item validation here
     setFormData({

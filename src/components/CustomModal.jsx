@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap';
 
 const CustomModal = ({ show, title, body, footer, onHide }) => {
-    console.log("Custom Modal rendered ==");
+    // console.log("Custom Modal rendered ==");
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton >

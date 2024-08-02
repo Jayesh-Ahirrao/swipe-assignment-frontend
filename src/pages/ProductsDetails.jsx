@@ -19,14 +19,14 @@ const ProductsDetails = () => {
     const { productsList } = useProductListData();
     const dispatch = useDispatch(); //stable ==> doesn't change between renders
 
-    console.log("productsList", productsList);
+    // console.log("productsList", productsList);
 
     const handleDelete = useCallback((id) => {
         dispatch(deleteProduct(id));
     }, [dispatch]);
 
     const handleEdit = useCallback((product) => {
-        console.log("updated payload for product" ,product);
+        // console.log("updated payload for product" ,product);
         dispatch(updateProduct(product));
     }, [dispatch]);
 
@@ -40,7 +40,7 @@ const ProductsDetails = () => {
 
         const finalProd = { ...product, id: v4() }
 
-        console.log(finalProd);
+        // console.log(finalProd);
 
         dispatch(addProduct(product));
         showToast("Product saved", TOASTVARIANTS.success);
