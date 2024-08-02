@@ -17,6 +17,7 @@ import GoToButton from "../UI/GoToButton";
 import { validateInvoice } from '../utils/validations';
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
+import { CATEGORIES } from "../constants/categories.js";
 
 
 
@@ -54,6 +55,8 @@ const InvoiceForm = () => {
           notes: "",
           total: "0.00",
           subTotal: "0.00",
+          goodsTotal: "0.00",
+          serviceTotal: "0.00",
           taxRate: "",
           taxAmount: "0.00",
           discountRate: "",
@@ -63,7 +66,7 @@ const InvoiceForm = () => {
         }
   );
 
-  // console.log("formData", formData);
+  console.log("formData", formData);
 
   useEffect(() => {
     handleCalculateTotal();
@@ -95,13 +98,22 @@ const InvoiceForm = () => {
     handleCalculateTotal();
   };
 
-  const handleCalculateTotal = () => {
+  /*
+const handleCalculateTotal = () => {
     setFormData((prevFormData) => {
       let subTotal = 0;
+      let goodsTotal = 0;
+      let serviceTotal = 0;
 
       prevFormData.items.forEach((item) => {
-        subTotal +=
-          parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity);
+        let currCost= parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity);
+
+        if(item.category === CATEGORIES.GOODS) {
+          goodsTotal += currCost;
+        }else{
+          serviceTotal += currCost;
+        }
+        subTotal += currCost;
       });
 
       const taxAmount = parseFloat(
@@ -122,6 +134,50 @@ const InvoiceForm = () => {
         taxAmount,
         discountAmount,
         total,
+        goodsTotal,
+        serviceTotal,
+      };
+    });
+  };
+  */
+
+  const handleCalculateTotal = () => {
+    setFormData((prevFormData) => {
+      let subTotal = 0;
+      let goodsTotal = 0;
+      let serviceTotal = 0;
+
+      prevFormData.items.forEach((item) => {
+        let currCost = parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity);
+
+        if (item.category === CATEGORIES.GOODS) {
+          goodsTotal += currCost;
+        } else {
+          serviceTotal += currCost;
+        }
+        subTotal += currCost;
+      });
+
+      const taxAmount = parseFloat(
+        subTotal * (prevFormData.taxRate / 100)
+      ).toFixed(2);
+      const discountAmount = parseFloat(
+        subTotal * (prevFormData.discountRate / 100)
+      ).toFixed(2);
+      const total = (
+        subTotal -
+        parseFloat(discountAmount) +
+        parseFloat(taxAmount)
+      ).toFixed(2);
+
+      return {
+        ...prevFormData,
+        subTotal: parseFloat(subTotal).toFixed(2),
+        serviceTotal: parseFloat(serviceTotal).toFixed(2),
+        goodsTotal: parseFloat(goodsTotal).toFixed(2),
+        taxAmount,
+        discountAmount,
+        total
       };
     });
   };
@@ -404,6 +460,9 @@ const InvoiceForm = () => {
               currency={formData.currency}
               subTotal={formData.subTotal}
               taxAmount={formData.taxAmount}
+              goodsTotal={formData.goodsTotal}
+              serviceTotal={formData.serviceTotal}
+              categoryTotal={formData.categoryTotal}
               discountAmount={formData.discountAmount}
               total={formData.total}
             />
