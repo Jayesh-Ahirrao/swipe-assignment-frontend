@@ -15,9 +15,9 @@ const InvoiceItem = (props) => {
 
   // console.log("iTEMS",items)
 
-  const itemTable = items.map((item) => (
+  const itemTable = items.map((item, index) => (
     <ItemRow
-      key={item.id}
+      key={index} //using it as we have no option for empty arrays
       item={item}
       onDelEvent={onRowDel}
       onItemizedItemEdit={onItemizedItemEdit}
