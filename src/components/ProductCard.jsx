@@ -1,7 +1,6 @@
-import { useCallback, useMemo, useState } from 'react';
-import { Card, Form } from 'react-bootstrap';
+import { useCallback, useState } from 'react';
+import { Card } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import CustomModal from './CustomModal';
 import validateProduct from '../utils/validateProduct.js'
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
@@ -12,12 +11,6 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
     console.log("parent card rendering nowwwwwwwwwww");
     const [showModal, setShowModal] = useState(false);
     const [editedProduct, setEditedProduct] = useState({ ...product });
-
-
-    const handleInputChnage = useCallback((event) => {
-        const { name, value } = event.target;
-        setEditedProduct((prev) => ({ ...prev, [name]: value }));
-    }, []);
 
     const handleModalSave = useCallback((updatedProduct) => {
         const res = validateProduct(updatedProduct);
@@ -43,14 +36,14 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
 
 
 
-    const modalFooter = useMemo(() => {
-        return (
-            <div>
-                <Button variant='secondary' onClick={handleModalClose} className='mx-2 py-2 rounded-5' >Close</Button>
-                <Button variant='primary' onClick={() => handleModalSave(editedProduct)} className='py-2 px-3 rounded-5' >Save</Button>
-            </div>
-        )
-    }, [editedProduct, handleModalClose, handleModalSave]);
+    // const modalFooter = useMemo(() => {
+    //     return (
+    //         <div>
+    //             <Button variant='secondary' onClick={handleModalClose} className='mx-2 py-2 rounded-5' >Close</Button>
+    //             <Button variant='primary' onClick={() => handleModalSave(editedProduct)} className='py-2 px-3 rounded-5' >Save</Button>
+    //         </div>
+    //     )
+    // }, [editedProduct, handleModalClose, handleModalSave]);
 
 
     return (
@@ -69,7 +62,9 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
                 </div>
             </Card>
 
-            {/* <CustomModal
+            {/* 
+            This component was causing unnecessary on each change
+            <CustomModal
                 show={showModal}
                 onHide={handleModalClose}
                 title="Edit Product"
