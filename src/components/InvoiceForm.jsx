@@ -36,7 +36,7 @@ const InvoiceForm = () => {
           invoiceNumber: listSize + 1,
         }
       : {
-          id: generateRandomId(),
+          id: generateRandomId(), //TODO: try using uuid
           currentDate: new Date().toLocaleDateString(),
           invoiceNumber: listSize + 1,
           dateOfIssue: "",
@@ -294,6 +294,7 @@ const InvoiceForm = () => {
                 />
               </Col>
             </Row>
+
             <InvoiceItem
               onItemizedItemEdit={onItemizedItemEdit}
               onRowAdd={handleAddEvent}
@@ -301,6 +302,7 @@ const InvoiceForm = () => {
               currency={formData.currency}
               items={formData.items}
             />
+            
             <Row className="mt-4 justify-content-end">
               <Col lg={6}>
                 <div className="d-flex flex-row align-items-start justify-content-between">
@@ -398,6 +400,7 @@ const InvoiceForm = () => {
               total={formData.total}
             />
             <Form.Group className="mb-3">
+              {/* TODO: Currency exchange */}
               <Form.Label className="fw-bold">Currency:</Form.Label>
               <Form.Select
                 onChange={(event) =>
