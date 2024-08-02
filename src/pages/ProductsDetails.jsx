@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux';
 import { deleteProduct, updateProduct, addProduct } from '../redux/productsSlice';
 import { Button } from 'react-bootstrap';
 import ProductModal from '../components/ProductModal';
-import validateProduct from '../utils/validateProduct.js'
+import { validateProduct } from '../utils/validations.js'
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
-import { v4  } from 'uuid'; // Import uuid package
+import { v4 } from 'uuid'; // Import uuid package
 
 
 // TODO: if you have time add a create product option next to goto btn
@@ -19,11 +19,14 @@ const ProductsDetails = () => {
     const { productsList } = useProductListData();
     const dispatch = useDispatch(); //stable ==> doesn't change between renders
 
+    console.log("productsList", productsList);
+
     const handleDelete = useCallback((id) => {
         dispatch(deleteProduct(id));
     }, [dispatch]);
 
     const handleEdit = useCallback((product) => {
+        console.log("updated payload for product" ,product);
         dispatch(updateProduct(product));
     }, [dispatch]);
 
@@ -35,14 +38,14 @@ const ProductsDetails = () => {
             return;
         }
 
-        const finalProd = {...product, id: v4() }
+        const finalProd = { ...product, id: v4() }
 
         console.log(finalProd);
-        
+
         dispatch(addProduct(product));
         showToast("Product saved", TOASTVARIANTS.success);
         handleModalClose();
-    }, [] );
+    }, []);
 
     const handleAddProduct = useCallback(() => {
         setShowModal(true);

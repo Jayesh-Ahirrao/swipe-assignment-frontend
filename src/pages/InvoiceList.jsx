@@ -9,6 +9,7 @@ import { useInvoiceListData } from "../redux/hooks";
 import { useDispatch } from "react-redux";
 import { deleteInvoice } from "../redux/invoicesSlice";
 import GoToButton from "../UI/GoToButton";
+import showToast from '../utils/showToast.js'
 
 const InvoiceList = () => {
   const { invoiceList, getOneInvoice } = useInvoiceListData();
@@ -17,11 +18,10 @@ const InvoiceList = () => {
   const [copyId, setCopyId] = useState("");
   const navigate = useNavigate();
 
-  // TODO: use toast instead of alert
   const handleCopyClick = () => {
     const invoice = getOneInvoice(copyId);
     if (!invoice) {
-      alert("Please enter the valid invoice id.");
+      showToast("Please enter the valid invoice id.");
     } else {
       navigate(`/create/${copyId}`);
     }
