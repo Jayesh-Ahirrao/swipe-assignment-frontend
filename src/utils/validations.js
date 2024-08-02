@@ -47,7 +47,8 @@ export const validateInvoice = (invoice, invoiceList = []) => {
     if (!invoice) return new ValidationResponse("This invoice number is already in use");
 
     // unique invoice number
-    const isIdNotUnique = invoiceList.find((record) => record.invoiceNumber === invoice.invoiceNumber)
+    // && codition to neglect own record in list
+    const isIdNotUnique = invoiceList.find((record) => (record.invoiceNumber === invoice.invoiceNumber && record.id !== invoice.id));
     if (isIdNotUnique) return new ValidationResponse("This invoice number is already in use");
 
     // dateOfIssue

@@ -164,17 +164,16 @@ const InvoiceForm = () => {
       showToast(res.message);
       return;
     }
-    showToast("Invoice added successfully", TOASTVARIANTS.success);
 
     if (isEdit) {
       dispatch(updateInvoice({ id: params.id, updatedInvoice: formData }));
-      alert("Invoice updated successfuly 🥳");
+      showToast("Invoice updated successfuly 🥳", TOASTVARIANTS.success);
     } else if (isCopy) {
       dispatch(addInvoice({ id: generateRandomId(), ...formData }));
-      alert("Invoice added successfuly 🥳");
+      showToast("Invoice added successfuly 🥳", TOASTVARIANTS.success);
     } else {
       dispatch(addInvoice(formData));
-      alert("Invoice added successfuly 🥳");
+      showToast("Invoice added successfuly 🥳", TOASTVARIANTS.success);
     }
     navigate("/");
   };
@@ -188,7 +187,7 @@ const InvoiceForm = () => {
         invoiceNumber: formData.invoiceNumber,
       });
     } else {
-      alert("Invoice does not exists!!!!!");
+      showToast("Invoice does not exists!!!!!");
     }
   };
 
