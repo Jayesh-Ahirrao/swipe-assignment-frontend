@@ -9,7 +9,8 @@ as uuid can be difficult for user to enter - give suggestions in input box for c
 
 
 changes in form
-        invoice number should be readonly
+
+        invoice number in update doesnt work.
         adds invoice without any fields ==> add validation
         discounts is taking negatuve values but when reviewing it shows the error 
         Convert currency to selected currency by user
@@ -18,3 +19,5 @@ done    generate uuid as random can give same id
         all the inputs already has required fields so only need to provide validation on when invoice is created
 
 
+
+        when u custom visit /edit/45 it gives error

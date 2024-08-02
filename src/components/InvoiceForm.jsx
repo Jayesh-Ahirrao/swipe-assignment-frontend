@@ -58,7 +58,7 @@ const InvoiceForm = () => {
         }
   );
 
-  console.log("formData", formData);
+  // console.log("formData", formData);
 
   useEffect(() => {
     handleCalculateTotal();
