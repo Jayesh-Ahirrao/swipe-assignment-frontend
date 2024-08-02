@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { BiTrash } from "react-icons/bi";
 import EditableField from "./EditableField";
+import { CATEGORIES } from "../constants/categories";
+import { Form } from "react-router-dom";
+import SelectBasicExample from "../UI/Select";
+
+const options = [CATEGORIES.GOODS, CATEGORIES.SERVICES];
 
 const InvoiceItem = (props) => {
   const { onItemizedItemEdit, currency, onRowDel, items = [], onRowAdd } = props;
@@ -86,6 +91,7 @@ const ItemRow = (props) => {
             id: props.item.itemId,
           }}
         />
+
       </td>
       <td style={{ minWidth: "130px" }}>
         <EditableField
@@ -104,6 +110,12 @@ const ItemRow = (props) => {
             id: props.item.itemId,
           }}
         />
+
+        <SelectBasicExample
+          name="category"
+          options={options}
+          value={props.item.category} onItemizedItemEdit={(evt) => props.onItemizedItemEdit(evt, props.item.itemId)} />
+
       </td>
       <td className="text-center" style={{ minWidth: "50px" }}>
         <BiTrash

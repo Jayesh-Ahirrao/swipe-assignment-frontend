@@ -10,7 +10,7 @@ import InvoiceModal from "./InvoiceModal";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
-import {  useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
 import { useInvoiceListData } from "../redux/hooks";
 import GoToButton from "../UI/GoToButton";
@@ -30,12 +30,12 @@ const InvoiceForm = () => {
     isEdit
       ? getOneInvoice(params.id)
       : isCopy && params.id
-      ? {
+        ? {
           ...getOneInvoice(params.id),
           id: generateRandomId(),
           invoiceNumber: listSize + 1,
         }
-      : {
+        : {
           id: generateRandomId(), //TODO: try using uuid
           currentDate: new Date().toLocaleDateString(),
           invoiceNumber: listSize + 1,
@@ -54,15 +54,7 @@ const InvoiceForm = () => {
           discountRate: "",
           discountAmount: "0.00",
           currency: "$",
-          items: [
-            {
-              itemId: 0,
-              itemName: "",
-              itemDescription: "",
-              itemPrice: "1.00",
-              itemQuantity: 1,
-            },
-          ],
+          items: [],
         }
   );
 
@@ -88,7 +80,9 @@ const InvoiceForm = () => {
       itemDescription: "",
       itemPrice: "1.00",
       itemQuantity: 1,
+      category: "", //you can keep goods as a default category
     };
+    //TODO: setup item validation here
     setFormData({
       ...formData,
       items: [...formData.items, newItem],
@@ -304,7 +298,7 @@ const InvoiceForm = () => {
               currency={formData.currency}
               items={formData.items}
             />
-            
+
             <Row className="mt-4 justify-content-end">
               <Col lg={6}>
                 <div className="d-flex flex-row align-items-start justify-content-between">

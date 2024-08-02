@@ -27,3 +27,91 @@ const formdata ={
         }
     ]
 }
+
+// const [currItem, setCurrItem] = useState({
+//     id: "",
+//     name: "",
+//     description: "",
+//     price: "",
+//     category: ""
+//   });
+
+
+
+/*
+const ItemRow = (props) => {
+  const onDelEvent = () => {
+    props.onDelEvent(props.item);
+  };
+  return (
+    <tr>
+      <td style={{ width: "100%" }}>
+        <EditableField
+          onItemizedItemEdit={(evt) =>
+            props.onItemizedItemEdit(evt, props.item.itemId)
+          }
+          cellData={{
+            type: "text",
+            name: "itemName",
+            placeholder: "Item name",
+            value: props.item.itemName,
+            id: props.item.itemId,
+          }}
+        />
+        <EditableField
+          onItemizedItemEdit={(evt) =>
+            props.onItemizedItemEdit(evt, props.item.itemId)
+          }
+          cellData={{
+            type: "text",
+            name: "itemDescription",
+            placeholder: "Item description",
+            value: props.item.itemDescription,
+            id: props.item.itemId,
+          }}
+        />
+      </td>
+      <td style={{ minWidth: "70px" }}>
+        <EditableField
+          onItemizedItemEdit={(evt) =>
+            props.onItemizedItemEdit(evt, props.item.itemId)
+          }
+          cellData={{
+            type: "number",
+            name: "itemQuantity",
+            min: 1,
+            step: "1",
+            value: props.item.itemQuantity,
+            id: props.item.itemId,
+          }}
+        />
+      </td>
+      <td style={{ minWidth: "130px" }}>
+        <EditableField
+          onItemizedItemEdit={(evt) =>
+            props.onItemizedItemEdit(evt, props.item.itemId)
+          }
+          cellData={{
+            leading: props.currency,
+            type: "number",
+            name: "itemPrice",
+            min: 1,
+            step: "0.01",
+            presicion: 2,
+            textAlign: "text-end",
+            value: props.item.itemPrice,
+            id: props.item.itemId,
+          }}
+        />
+      </td>
+      <td className="text-center" style={{ minWidth: "50px" }}>
+        <BiTrash
+          onClick={onDelEvent}
+          style={{ height: "33px", width: "33px", padding: "7.5px" }}
+          className="text-white mt-1 btn btn-danger"
+        />
+      </td>
+    </tr>
+  );
+};
+*/
