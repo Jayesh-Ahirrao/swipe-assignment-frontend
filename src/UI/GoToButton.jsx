@@ -1,8 +1,8 @@
-import { BiArrowBack } from "react-icons/bi";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
 
+// TODO: Update all buttons comps where this comp can be used;
 const GoToButton = ({ url, text, type = "primary" }) => {
     return (
         <Link to={url}>

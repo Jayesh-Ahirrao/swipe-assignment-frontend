@@ -5,9 +5,11 @@ import CustomModal from './CustomModal';
 import validateProduct from '../utils/validateProduct.js'
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
+import ProductModal from './ProductModal'
 
 
 const ProductCard = ({ product, onDelete, onEdit }) => {
+    console.log("parent card rendering nowwwwwwwwwww");
     const [showModal, setShowModal] = useState(false);
     const [editedProduct, setEditedProduct] = useState({ ...product });
 
@@ -50,6 +52,7 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
         )
     }, [editedProduct, handleModalClose, handleModalSave]);
 
+
     return (
         <>
             <Card style={{ width: '18rem' }} className="p-4 my-1">
@@ -66,8 +69,7 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
                 </div>
             </Card>
 
-
-            <CustomModal
+            {/* <CustomModal
                 show={showModal}
                 onHide={handleModalClose}
                 title="Edit Product"
@@ -88,7 +90,9 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
                     </Form >
                 }
                 footer={modalFooter}
-            />
+            />  */}
+
+            <ProductModal show={showModal} title="Update Product" product={editedProduct}  onClose={handleModalClose} onSave={handleModalSave} /> 
         </>
     )
 }
