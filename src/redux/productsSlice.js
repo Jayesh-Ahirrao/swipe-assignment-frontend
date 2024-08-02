@@ -18,6 +18,18 @@ const productsSlice = createSlice({
         addProduct: (state, action) => {
             state.products.push(action.payload);
         },
+        updateBulkProducts: (state, action) => {
+            if (!action.payload || !Array.isArray(action.payload)) return;
+
+            action.payload.forEach((product) => {
+                const existingRecordIndex = state.products.findIndex((record) => record.id === product.id);
+                if (existingRecordIndex !== -1) {
+                    state.products[existingRecordIndex] = product;
+                } else {
+                    state.products.push(product);
+                }
+            })
+        }
     },
 });
 
@@ -26,4 +38,4 @@ export const selectProductList = (state) => state.products;
 
 
 export default productsSlice.reducer;
-export const {addProduct, deleteProduct, updateProduct} = productsSlice.actions;
+export const { addProduct, deleteProduct, updateProduct, updateBulkProducts } = productsSlice.actions;

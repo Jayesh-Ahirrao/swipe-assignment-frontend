@@ -18,6 +18,7 @@ import { validateInvoice } from '../utils/validations';
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { CATEGORIES } from "../constants/categories.js";
+import { updateBulkProducts } from "../redux/productsSlice.js";
 
 
 
@@ -226,11 +227,23 @@ const handleCalculateTotal = () => {
 
   const handleAddInvoice = () => {
     const res = validateInvoice(formData, invoiceList);
-
     if (!res.passed) {
       showToast(res.message);
       return;
     }
+
+    // do mapping of items to products syntax
+    const bulkUpdatingProducts = formData.items.map((item) => {
+      return {
+        name: item.itemName,
+        id: item.itemId,
+        description: item.itemDescription,
+        price: item.itemPrice,
+        category: item.category
+      }
+    });
+
+    dispatch(updateBulkProducts(bulkUpdatingProducts));
 
     if (isEdit) {
       dispatch(updateInvoice({ id: params.id, updatedInvoice: formData }));
