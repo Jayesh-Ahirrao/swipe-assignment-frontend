@@ -96,7 +96,7 @@ const InvoiceModal = (props) => {
                     (
                       <tr id={i} key={i}>
                         <td style={{ width: "70px" }}>{item.itemQuantity}</td>
-                        <td>
+                        <td className="descprition-cell" >
                           {item.itemName} - {item.itemDescription}
                         </td>
                         <td className="text-end" style={{ width: "100px" }}>
@@ -136,7 +136,7 @@ const InvoiceModal = (props) => {
                     (
                       <tr id={i} key={i}>
                         <td style={{ width: "70px" }}>{item.itemQuantity}</td>
-                        <td>
+                        <td className="descprition-cell">
                           {item.itemName} - {item.itemDescription}
                         </td>
                         <td className="text-end" style={{ width: "100px" }}>
@@ -238,7 +238,7 @@ const InvoiceModal = (props) => {
           </Row>
         </div>
       </Modal>
-     
+
     </>
   );
 };

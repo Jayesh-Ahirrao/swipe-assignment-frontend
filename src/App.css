@@ -110,3 +110,8 @@ hr {
   border-radius: 5px;
   font-weight: bold;
 }
+
+.descprition-cell{
+  max-width: 20vw;
+  word-wrap: break-word;
+}
