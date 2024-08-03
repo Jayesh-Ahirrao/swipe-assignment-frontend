@@ -61,7 +61,7 @@ const InvoiceItem = (props) => {
         <Dropdown.Toggle variant="warning" split id="dropdown-custom-2" />
         <Dropdown.Menu>
           {
-            productsList.map(product => <Dropdown.Item id={product.id} eventKey={product.id}>{product.name}</Dropdown.Item>)
+            productsList.map(product => <Dropdown.Item key={product.id} id={product.id} eventKey={product.id}>{product.name}</Dropdown.Item>)
           }
         </Dropdown.Menu>
       </Dropdown>
