@@ -67,7 +67,6 @@ const InvoiceForm = () => {
         }
   );
 
-  console.log("formData", formData);
 
   useEffect(() => {
     handleCalculateTotal();
@@ -94,7 +93,6 @@ const InvoiceForm = () => {
     };
 
     if (selectedProduct) {
-      console.log("FROM ADDING NEEW PROD inside if", newItem);
 
       newItem.itemId = selectedProduct.id;
       newItem.itemName = selectedProduct.name;
@@ -103,7 +101,6 @@ const InvoiceForm = () => {
       newItem.category = selectedProduct.category;
     }
 
-    console.log("FROM ADDING NEEW PROD", newItem);
 
     //TODO: setup item validation here
     setFormData((prevFormData) => ({
@@ -258,6 +255,8 @@ const handleCalculateTotal = () => {
       dispatch(addInvoice(formData));
       showToast("Invoice added successfuly 🥳", TOASTVARIANTS.success);
     }
+
+    handleCalculateTotal();
     navigate("/");
   };
 

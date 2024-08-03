@@ -17,7 +17,6 @@ const InvoiceItem = (props) => {
   const { productsList } = useProductListData();
 
 
-  // console.log("iTEMS",items)
 
   const itemTable = items.map((item, index) => (
     <ItemRow
