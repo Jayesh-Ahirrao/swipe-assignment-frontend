@@ -38,6 +38,7 @@ const InvoiceModal = (props) => {
         size="lg"
         centered
       >
+        <Modal.Header closeButton ></Modal.Header>
         <div id="invoiceCapture">
           <div className="d-flex flex-row justify-content-between align-items-start bg-light w-100 p-4">
             <div className="w-100">
@@ -238,7 +239,6 @@ const InvoiceModal = (props) => {
           </Row>
         </div>
       </Modal>
-
     </>
   );
 };
