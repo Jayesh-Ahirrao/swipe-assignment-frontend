@@ -8,7 +8,22 @@ done    generate uuid as random can give same id
 Done    adds invoice without any fields ==> add validation
 Done    discounts is taking negatuve values but when reviewing it shows the error 
 Done    all the inputs already has required fields so only need to provide validation on when invoice is created
+Done    products should be directly copied to the fields on select
 
-        as uuid can be difficult for user to enter - give suggestions in input box for copyId        
-        Convert currency to selected currency by user
-        when u custom visit /edit/45 it gives error
+Done    Field Update from invoice form should update the products state   
+        ==> should be done on saving the invoice to avoid unnecessary state updates
+        it will also save us from performing validations again
+
+
+                        as uuid can be difficult for user to enter - give suggestions in input box for copyId  
+                        
+                        Convert currency to selected currency by user
+                        
+                        when u custom visit /edit/45 it gives error
+
+High priority       Dynamic Invoices updates on products updates
+
+                        try to update fn params to get state as params and not global obj
+                        
+                        before prod ==> cleanup comments and consoles   
+                                        add usefull comments 

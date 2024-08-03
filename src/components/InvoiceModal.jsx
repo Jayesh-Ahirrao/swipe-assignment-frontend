@@ -29,7 +29,6 @@ const GenerateInvoice = () => {
 
 const InvoiceModal = (props) => {
 
-  console.log("From model incvoice", props);
 
   return (
     <div>

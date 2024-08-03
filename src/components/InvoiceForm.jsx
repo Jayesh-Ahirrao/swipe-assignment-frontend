@@ -18,6 +18,7 @@ import { validateInvoice } from '../utils/validations';
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { CATEGORIES } from "../constants/categories.js";
+import { updateBulkProducts } from "../redux/productsSlice.js";
 
 
 
@@ -66,7 +67,6 @@ const InvoiceForm = () => {
         }
   );
 
-  console.log("formData", formData);
 
   useEffect(() => {
     handleCalculateTotal();
@@ -80,8 +80,9 @@ const InvoiceForm = () => {
     handleCalculateTotal();
   };
 
-  const handleAddEvent = () => {
+  const handleAddEvent = (selectedProduct = null) => {
     const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+
     const newItem = {
       itemId: id,
       itemName: "",
@@ -90,11 +91,22 @@ const InvoiceForm = () => {
       itemQuantity: 1,
       category: "", //you can keep goods as a default category
     };
+
+    if (selectedProduct) {
+
+      newItem.itemId = selectedProduct.id;
+      newItem.itemName = selectedProduct.name;
+      newItem.itemDescription = selectedProduct.description;
+      newItem.itemPrice = selectedProduct.price;
+      newItem.category = selectedProduct.category;
+    }
+
+
     //TODO: setup item validation here
-    setFormData({
-      ...formData,
-      items: [...formData.items, newItem],
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      items: [...prevFormData.items, newItem],
+    }));
     handleCalculateTotal();
   };
 
@@ -215,11 +227,23 @@ const handleCalculateTotal = () => {
 
   const handleAddInvoice = () => {
     const res = validateInvoice(formData, invoiceList);
-
     if (!res.passed) {
       showToast(res.message);
       return;
     }
+
+    // do mapping of items to products syntax
+    const bulkUpdatingProducts = formData.items.map((item) => {
+      return {
+        name: item.itemName,
+        id: item.itemId,
+        description: item.itemDescription,
+        price: item.itemPrice,
+        category: item.category
+      }
+    });
+
+    dispatch(updateBulkProducts(bulkUpdatingProducts));
 
     if (isEdit) {
       dispatch(updateInvoice({ id: params.id, updatedInvoice: formData }));
@@ -231,6 +255,8 @@ const handleCalculateTotal = () => {
       dispatch(addInvoice(formData));
       showToast("Invoice added successfuly 🥳", TOASTVARIANTS.success);
     }
+
+    handleCalculateTotal();
     navigate("/");
   };
 

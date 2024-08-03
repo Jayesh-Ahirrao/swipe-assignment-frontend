@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -6,13 +6,17 @@ import { BiTrash } from "react-icons/bi";
 import EditableField from "./EditableField";
 import { CATEGORIES } from "../constants/categories";
 import SelectBasicExample from "../UI/Select";
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { useProductListData } from "../redux/hooks";
 
 const options = [CATEGORIES.GOODS, CATEGORIES.SERVICES];
 
 const InvoiceItem = (props) => {
   const { onItemizedItemEdit, currency, onRowDel, items = [], onRowAdd } = props;
+  const { productsList } = useProductListData();
 
-  // console.log("iTEMS",items)
+
 
   const itemTable = items.map((item, index) => (
     <ItemRow
@@ -23,6 +27,15 @@ const InvoiceItem = (props) => {
       currency={currency}
     />
   ));
+
+  const handleProductAdd = useCallback((id) => {
+    const selectedProduct = productsList.find(product => product.id == id);
+
+    if(selectedProduct) {
+      onRowAdd(selectedProduct);
+    }
+
+  } ,[]);
 
   return (
     <div>
@@ -37,9 +50,19 @@ const InvoiceItem = (props) => {
         </thead>
         <tbody>{itemTable}</tbody>
       </Table>
-      <Button className="fw-bold" onClick={onRowAdd}>
-        Add Item
-      </Button>
+
+      <Dropdown as={ButtonGroup} onSelect={handleProductAdd}>
+
+        <Button className="fw-bold" onClick={() =>  onRowAdd()}>
+          Add Item
+        </Button>
+        <Dropdown.Toggle variant="warning" split id="dropdown-custom-2" />
+        <Dropdown.Menu>
+          {
+            productsList.map(product => <Dropdown.Item id={product.id} eventKey={product.id}>{product.name}</Dropdown.Item>)
+          }
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
   );
 };
