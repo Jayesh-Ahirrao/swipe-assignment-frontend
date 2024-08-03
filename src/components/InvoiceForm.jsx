@@ -78,9 +78,9 @@ const InvoiceForm = () => {
 
 
 
-  useEffect(() => {
-    handleCalculateTotal();
-  }, []);
+  // useEffect(() => {
+  //   handleCalculateTotal();
+  // }, []);
 
   const handleRowDel = (itemToDelete) => {
     const updatedItems = formData.items.filter(

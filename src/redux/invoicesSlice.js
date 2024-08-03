@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateProduct } from "./productsSlice";
+import { getUpdatedPricedForInvoice } from "../utils/updateInvoice";
+import { CATEGORIES } from "../constants/categories";
 
 
 const invoicesSlice = createSlice({
@@ -27,6 +29,10 @@ const invoicesSlice = createSlice({
 
         const productIndex = invoice.items.findIndex((record) => record.itemId == updatedProduct.id);
         if (productIndex !== -1) {
+
+          const itemInsideInvoice = invoice.items[productIndex];
+          const prevItemCost = parseFloat(itemInsideInvoice.itemPrice).toFixed(2) * parseInt(itemInsideInvoice.itemQuantity, 10);
+
           // this is to retain the quanity field which is present in items not in products
           invoice.items[productIndex] = {
             ...invoice.items[productIndex],
@@ -35,9 +41,28 @@ const invoicesSlice = createSlice({
             category: updatedProduct.category,
             itemName: updatedProduct.name,
           }
+
+          // only if product found update invoice based on new values
+          // calculate data for curr item
+          const currItemCost = parseFloat(invoice.items[productIndex].itemPrice).toFixed(2) * parseInt(itemInsideInvoice.itemQuantity, 10);
+
+          invoice.subTotal = parseFloat((parseFloat(invoice.subTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString(); //before tax and discounts
+
+          if (updatedProduct.category === CATEGORIES.GOODS) {
+            invoice.goodsTotal = parseFloat((parseFloat(invoice.goodsTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString();
+          } else {
+            invoice.serviceTotal = parseFloat((parseFloat(invoice.serviceTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString;
+          }
+
+          let taxRate = parseFloat(invoice.taxRate) || 0;
+          let discountRate = parseFloat(invoice.discountRate) || 0;
+
+          invoice.taxAmount = (parseFloat(invoice.subTotal) * ( taxRate / 100)).toFixed(2).toString();
+          invoice.discountAmount = (parseFloat(invoice.subTotal) * (discountRate / 100)).toFixed(2).toString();
+
+          invoice.total = (parseFloat(invoice.subTotal) - parseFloat(invoice.discountAmount) + parseFloat(invoice.taxAmount)).toFixed(2).toString();
         }
       })
-
     });
   }
 });
