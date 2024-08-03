@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import { BiSolidPencil, BiTrash } from "react-icons/bi";
 import { BsEyeFill } from "react-icons/bs";
@@ -125,23 +125,23 @@ const InvoiceRow = ({ invoice, navigate }) => {
       </td>
       <td style={{ width: "5%" }}>
         <Button variant="outline-primary" onClick={handleEditClick}>
-          <div className="d-flex align-items-center justify-content-center gap-2">
+          <span className="d-flex align-items-center justify-content-center gap-2">
             <BiSolidPencil />
-          </div>
+          </span>
         </Button>
       </td>
       <td style={{ width: "5%" }}>
         <Button variant="danger" onClick={() => handleDeleteClick(invoice.id)}>
-          <div className="d-flex align-items-center justify-content-center gap-2">
+          <span className="d-flex align-items-center justify-content-center gap-2">
             <BiTrash />
-          </div>
+          </span>
         </Button>
       </td>
       <td style={{ width: "5%" }}>
         <Button variant="secondary" onClick={openModal}>
-          <div className="d-flex align-items-center justify-content-center gap-2">
+          <span className="d-flex align-items-center justify-content-center gap-2">
             <BsEyeFill />
-          </div>
+          </span>
         </Button>
       </td>
       <InvoiceModal

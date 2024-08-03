@@ -31,7 +31,7 @@ const InvoiceModal = (props) => {
 
 
   return (
-    <div>
+    <>
       <Modal
         show={props.showModal}
         onHide={props.closeModal}
@@ -238,8 +238,8 @@ const InvoiceModal = (props) => {
           </Row>
         </div>
       </Modal>
-      <hr className="mt-4 mb-3" />
-    </div>
+     
+    </>
   );
 };
 
