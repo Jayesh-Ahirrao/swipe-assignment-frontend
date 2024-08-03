@@ -29,6 +29,8 @@ const InvoiceItem = (props) => {
   ));
 
   const handleProductAdd = useCallback((id) => {
+    // using lose equality because our product could be int.
+    // this will be updated when high priority tasks are completed
     const selectedProduct = productsList.find(product => product.id == id);
 
     if(selectedProduct) {

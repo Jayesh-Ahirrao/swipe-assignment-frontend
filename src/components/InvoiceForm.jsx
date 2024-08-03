@@ -36,7 +36,7 @@ const InvoiceForm = () => {
 
 
   const [formData, setFormData] = useState({
-    id: generateRandomId(), //TODO: try using uuid
+    id: generateRandomId(), 
     currentDate: new Date().toLocaleDateString(),
     invoiceNumber: listSize + 1,
     dateOfIssue: "",
@@ -60,6 +60,7 @@ const InvoiceForm = () => {
   }
   );
 
+  // this useEffect prevents the error when user try to edit invalid invoice
   useEffect(() => {
     if (isEdit || (isCopy && params.id)) {
       const invoice = getOneInvoice(params.id);
@@ -101,8 +102,9 @@ const InvoiceForm = () => {
       category: "", //you can keep goods as a default category
     };
 
+    // we are utilizing this fn for both user input details and autifill details from existing products
+    // because the products obj were designed differently we have to do this mapping
     if (selectedProduct) {
-
       newItem.itemId = selectedProduct.id;
       newItem.itemName = selectedProduct.name;
       newItem.itemDescription = selectedProduct.description;
@@ -110,8 +112,6 @@ const InvoiceForm = () => {
       newItem.category = selectedProduct.category;
     }
 
-
-    //TODO: setup item validation here
     setFormData((prevFormData) => ({
       ...prevFormData,
       items: [...prevFormData.items, newItem],
@@ -119,52 +119,10 @@ const InvoiceForm = () => {
     handleCalculateTotal();
   };
 
-  /*
-const handleCalculateTotal = () => {
-    setFormData((prevFormData) => {
-      let subTotal = 0;
-      let goodsTotal = 0;
-      let serviceTotal = 0;
-
-      prevFormData.items.forEach((item) => {
-        let currCost= parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity);
-
-        if(item.category === CATEGORIES.GOODS) {
-          goodsTotal += currCost;
-        }else{
-          serviceTotal += currCost;
-        }
-        subTotal += currCost;
-      });
-
-      const taxAmount = parseFloat(
-        subTotal * (prevFormData.taxRate / 100)
-      ).toFixed(2);
-      const discountAmount = parseFloat(
-        subTotal * (prevFormData.discountRate / 100)
-      ).toFixed(2);
-      const total = (
-        subTotal -
-        parseFloat(discountAmount) +
-        parseFloat(taxAmount)
-      ).toFixed(2);
-
-      return {
-        ...prevFormData,
-        subTotal: parseFloat(subTotal).toFixed(2),
-        taxAmount,
-        discountAmount,
-        total,
-        goodsTotal,
-        serviceTotal,
-      };
-    });
-  };
-  */
-
   const handleCalculateTotal = () => {
     setFormData((prevFormData) => {
       let subTotal = 0;
+      // Adding goodsTotal and servicesTotal for grouping of bills
       let goodsTotal = 0;
       let serviceTotal = 0;
 

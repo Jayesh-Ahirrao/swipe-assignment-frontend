@@ -5,8 +5,6 @@ import Button from 'react-bootstrap/Button';
 import React from "react";
 
 
-
-
 const ProductModal = ({ show, title, product, onClose, onSave, isCreateModal = false }) => {
     const options = ['goods', 'services'];
 
@@ -73,5 +71,6 @@ const ProductModal = ({ show, title, product, onClose, onSave, isCreateModal = f
         </Modal>
     )
 }
+
 
 export default React.memo(ProductModal);

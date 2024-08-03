@@ -9,10 +9,9 @@ import ProductModal from '../components/ProductModal';
 import { validateProduct } from '../utils/validations.js'
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
-import { v4 } from 'uuid'; // Import uuid package
+import { v4 } from 'uuid';
 
 
-// TODO: if you have time add a create product option next to goto btn
 const ProductsDetails = () => {
     const [showModal, setShowModal] = useState(false);
 
@@ -28,6 +27,10 @@ const ProductsDetails = () => {
         dispatch(updateProduct(product));
     }, [dispatch]);
 
+    const handleModalClose = useCallback(() => {
+        setShowModal(false);
+    }, []);
+
     const handleModalSave = useCallback((product) => {
         const res = validateProduct(product);
 
@@ -35,20 +38,16 @@ const ProductsDetails = () => {
             showToast(res.message);
             return;
         }
-        // TODO: check this
+        // This component is used for new product and existing product hence to enforce id doing tihs
         const finalProd = product.id ? {...product} :  { ...product, id: v4() };
 
         dispatch(addProduct(finalProd));
         showToast("Product saved", TOASTVARIANTS.success);
         handleModalClose();
-    }, []);
+    }, [dispatch, handleModalClose]);
 
     const handleAddProduct = useCallback(() => {
         setShowModal(true);
-    }, []);
-
-    const handleModalClose = useCallback(() => {
-        setShowModal(false);
     }, []);
 
     return (
