@@ -1,6 +1,9 @@
 import { CATEGORIES } from "../constants/categories";
 var validator = require("email-validator");
 
+/**
+ * a custom error obj to provide more reusability
+ */
 class ValidationResponse {
     constructor(message, passed = false) {
         this.passed = passed;

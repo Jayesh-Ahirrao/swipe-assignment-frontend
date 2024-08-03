@@ -19,13 +19,16 @@ const productsSlice = createSlice({
             state.products.push(action.payload);
         },
         updateBulkProducts: (state, action) => {
+            // build addition of products which can include both new and existing-updated-products
             if (!action.payload || !Array.isArray(action.payload)) return;
 
             action.payload.forEach((product) => {
                 const existingRecordIndex = state.products.findIndex((record) => record.id === product.id);
                 if (existingRecordIndex !== -1) {
+                    // if product already exists then update it 
                     state.products[existingRecordIndex] = product;
                 } else {
+                    // otherwise insert new record 
                     state.products.push(product);
                 }
             })

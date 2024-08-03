@@ -1,5 +1,8 @@
 import toast from 'react-hot-toast';
 
+/**
+ * the second arg is optional which by default is error
+ */
 const showToast = (message, type = 'error', id) => {
     if (type === 'error') {
         toast.error(message);

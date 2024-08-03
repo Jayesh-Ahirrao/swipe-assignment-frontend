@@ -1,6 +1,8 @@
 import { v4 } from 'uuid';
-
-// use this when everything is working properly
+/**
+ * Using uuid to avod duplicaitons
+ * @returns uuid 
+ */
 const generateRandomId = () => {
   return v4();
 };

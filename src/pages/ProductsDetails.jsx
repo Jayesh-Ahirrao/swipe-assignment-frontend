@@ -36,9 +36,9 @@ const ProductsDetails = () => {
             return;
         }
         // TODO: check this
-        const finalProd = { ...product, id: v4() }
+        const finalProd = product.id ? {...product} :  { ...product, id: v4() };
 
-        dispatch(addProduct(product));
+        dispatch(addProduct(finalProd));
         showToast("Product saved", TOASTVARIANTS.success);
         handleModalClose();
     }, []);

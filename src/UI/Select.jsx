@@ -1,4 +1,6 @@
 import Form from 'react-bootstrap/Form';
+import PropTypes from 'prop-types';
+
 
 const SelectBasicExample = (props) => {
     return (
@@ -9,6 +11,18 @@ const SelectBasicExample = (props) => {
             ))}
         </Form.Select>
     );
+}
+
+
+SelectBasicExample.propTypes = {
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    onItemizedItemEdit: PropTypes.func.isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+}
+
+SelectBasicExample.defaultProps = {
+    value: '',
 }
 
 export default SelectBasicExample;
