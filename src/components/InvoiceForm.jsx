@@ -33,39 +33,48 @@ const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [copyId, setCopyId] = useState("");
   const { getOneInvoice, listSize, invoiceList } = useInvoiceListData();
-  const [formData, setFormData] = useState(
-    isEdit
-      ? getOneInvoice(params.id)
-      : isCopy && params.id
-        ? {
-          ...getOneInvoice(params.id),
-          id: generateRandomId(),
-          invoiceNumber: listSize + 1,
-        }
-        : {
-          id: generateRandomId(), //TODO: try using uuid
-          currentDate: new Date().toLocaleDateString(),
-          invoiceNumber: listSize + 1,
-          dateOfIssue: "",
-          billTo: "",
-          billToEmail: "",
-          billToAddress: "",
-          billFrom: "",
-          billFromEmail: "",
-          billFromAddress: "",
-          notes: "",
-          total: "0.00",
-          subTotal: "0.00",
-          goodsTotal: "0.00",
-          serviceTotal: "0.00",
-          taxRate: "",
-          taxAmount: "0.00",
-          discountRate: "",
-          discountAmount: "0.00",
-          currency: "$",
-          items: [],
-        }
+
+
+  const [formData, setFormData] = useState({
+    id: generateRandomId(), //TODO: try using uuid
+    currentDate: new Date().toLocaleDateString(),
+    invoiceNumber: listSize + 1,
+    dateOfIssue: "",
+    billTo: "",
+    billToEmail: "",
+    billToAddress: "",
+    billFrom: "",
+    billFromEmail: "",
+    billFromAddress: "",
+    notes: "",
+    total: "0.00",
+    subTotal: "0.00",
+    goodsTotal: "0.00",
+    serviceTotal: "0.00",
+    taxRate: "",
+    taxAmount: "0.00",
+    discountRate: "",
+    discountAmount: "0.00",
+    currency: "$",
+    items: [],
+  }
   );
+
+  useEffect(() => {
+    if (isEdit || (isCopy && params.id)) {
+      const invoice = getOneInvoice(params.id);
+      if (!invoice) {
+        showToast("Invoice not found");
+        navigate('/');
+      }
+      else if (isEdit) {
+        setFormData(invoice);
+      } else {
+        setFormData({ ...invoice, id: generateRandomId(), invoiceNumber: listSize + 1 });
+      }
+    }
+  }, []);
+
 
 
   useEffect(() => {
@@ -76,7 +85,7 @@ const InvoiceForm = () => {
     const updatedItems = formData.items.filter(
       (item) => item.itemId !== itemToDelete.itemId
     );
-    setFormData({ ...formData, items: updatedItems });
+    setFormData((prevFormData) => ({  ...prevFormData, items: updatedItems }));
     handleCalculateTotal();
   };
 
