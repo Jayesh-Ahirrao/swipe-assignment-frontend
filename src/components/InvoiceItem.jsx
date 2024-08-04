@@ -123,7 +123,7 @@ const ItemRow = (props) => {
             props.onItemizedItemEdit(evt, props.item.itemId)
           }
           cellData={{
-            leading: props.currency,
+            leading: props.currency.split(" ")[0],
             type: "number",
             name: "itemPrice",
             min: 1,

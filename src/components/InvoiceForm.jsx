@@ -19,6 +19,7 @@ import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { CATEGORIES } from "../constants/categories.js";
 import { updateBulkProducts } from "../redux/productsSlice.js";
+import { CURRENCIES_OPTIONS } from "../constants/currencies.js";
 
 
 
@@ -36,7 +37,7 @@ const InvoiceForm = () => {
 
 
   const [formData, setFormData] = useState({
-    id: generateRandomId(), 
+    id: generateRandomId(),
     currentDate: new Date().toLocaleDateString(),
     invoiceNumber: listSize + 1,
     dateOfIssue: "",
@@ -86,7 +87,7 @@ const InvoiceForm = () => {
     const updatedItems = formData.items.filter(
       (item) => item.itemId !== itemToDelete.itemId
     );
-    setFormData((prevFormData) => ({  ...prevFormData, items: updatedItems }));
+    setFormData((prevFormData) => ({ ...prevFormData, items: updatedItems }));
     handleCalculateTotal();
   };
 
@@ -365,7 +366,7 @@ const InvoiceForm = () => {
                 <div className="d-flex flex-row align-items-start justify-content-between">
                   <span className="fw-bold">Subtotal:</span>
                   <span>
-                    {formData.currency}
+                    {formData.currency}{":  "}
                     {formData.subTotal}
                   </span>
                 </div>
@@ -373,17 +374,17 @@ const InvoiceForm = () => {
                   <span className="fw-bold">Discount:</span>
                   <span>
                     <span className="small">
-                      ({formData.discountRate || 0}%)
+                      ({formData.discountRate || 0}%){" "}
                     </span>
-                    {formData.currency}
+                    {formData.currency}{": "}
                     {formData.discountAmount || 0}
                   </span>
                 </div>
                 <div className="d-flex flex-row align-items-start justify-content-between mt-2">
                   <span className="fw-bold">Tax:</span>
                   <span>
-                    <span className="small">({formData.taxRate || 0}%)</span>
-                    {formData.currency}
+                    <span className="small">({formData.taxRate || 0}%){" "}</span>
+                    {formData.currency}{":  "}
                     {formData.taxAmount || 0}
                   </span>
                 </div>
@@ -394,7 +395,7 @@ const InvoiceForm = () => {
                 >
                   <span className="fw-bold">Total:</span>
                   <span className="fw-bold">
-                    {formData.currency}
+                    {formData.currency}{":  "}
                     {formData.total || 0}
                   </span>
                 </div>
@@ -469,14 +470,13 @@ const InvoiceForm = () => {
                 className="btn btn-light my-1"
                 aria-label="Change Currency"
               >
-                <option value="$">USD (United States Dollar)</option>
-                <option value="£">GBP (British Pound Sterling)</option>
-                <option value="¥">JPY (Japanese Yen)</option>
-                <option value="$">CAD (Canadian Dollar)</option>
-                <option value="$">AUD (Australian Dollar)</option>
-                <option value="$">SGD (Singapore Dollar)</option>
-                <option value="¥">CNY (Chinese Renminbi)</option>
-                <option value="₿">BTC (Bitcoin)</option>
+                {
+                  CURRENCIES_OPTIONS.map((currency) => {
+                    return (
+                      <option value={currency.symbol} key={currency.symbol}>{currency.name}</option>
+                    )
+                  })
+                }
               </Form.Select>
             </Form.Group>
             <Form.Group className="my-3">
