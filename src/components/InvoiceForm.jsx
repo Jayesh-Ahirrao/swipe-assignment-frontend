@@ -460,7 +460,7 @@ const InvoiceForm = () => {
               total={formData.total}
             />
             <Form.Group className="mb-3">
-              {/* TODO: Currency exchange */}
+              {/* TODO: Currency exchange Move this to constants*/}
               <Form.Label className="fw-bold">Currency:</Form.Label>
               <Form.Select
                 onChange={(event) =>

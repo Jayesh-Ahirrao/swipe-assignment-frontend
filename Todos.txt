@@ -18,10 +18,10 @@ done    when u custom visit /edit/45 it gives error
 done    as uuid can be difficult for user to enter - give suggestions in input box for copyId  
 done    before prod ==> cleanup comments and consoles  
                         add usefull comments 
-                        
+Done High priority       Dynamic Invoices updates on products updates
+   
                         
                         
                         Convert currency to selected currency by user
-High priority       Dynamic Invoices updates on products updates
 
                         try to update fn params to get state as params and not global obj
