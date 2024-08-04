@@ -34,6 +34,8 @@
 ## 🐛 Bugs and issues found and now resolved
 - Invalid use of HTML at some places
 - **ID could be duplicated**
+- Preventing user to visit **unhandled routes**
+- preventing user to **Edit Invalid Invoice**
 - **Invoice number updation**
 - Could have had multiple invoices with same number at same time
 - Negative values could be taken for prices, taxes, discounts
