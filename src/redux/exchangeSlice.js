@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API_ENDPOINTS, CURRENCIES_OPTIONS } from "../constants/currencies";
+import { API_ENDPOINTS, CURRENCIES_OPTIONS, DECIMAL_PLACES } from "../constants/currencies";
 
 
 /**
@@ -21,14 +21,14 @@ import { API_ENDPOINTS, CURRENCIES_OPTIONS } from "../constants/currencies";
 
     Hence we need to convert it keeping USD as base 
  */
-const getCurrencyExchangeRates = createAsyncThunk("exchange/getExchangeRates", async () => {
+export const getCurrencyExchangeRates = createAsyncThunk("exchange/getExchangeRates", async () => {
     const CurrencyRatesResponse = await fetch(API_ENDPOINTS.CURRENCIES);
     const CurrencyRatesData = await CurrencyRatesResponse.json();
 
     const BitcoinRatesResponse = await fetch(API_ENDPOINTS.CRYPTO);
-    const BitcoinToUSDRate = await BitcoinRatesResponse.json();
+    const cryptoData = await BitcoinRatesResponse.json();
 
-    const USDtoBITCOINRate = parseFloat(1 / BitcoinToUSDRate);
+    const USDtoBITCOINRate = parseFloat(1 / cryptoData.bitcoin.usd).toFixed(DECIMAL_PLACES.BITCOIN);
 
     return {
         ...CurrencyRatesData.rates,
@@ -41,7 +41,6 @@ const initialState = {
     loading: false,
     rates: null,
     error: null,
-
 }
 
 const exchangeSlice = createSlice({
@@ -62,4 +61,6 @@ const exchangeSlice = createSlice({
     }
 })
 
+
+export const selectExchange = (state) => state.exchange;
 export default exchangeSlice.reducer;

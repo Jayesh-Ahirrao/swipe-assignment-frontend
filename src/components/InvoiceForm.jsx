@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
-import { useInvoiceListData } from "../redux/hooks";
+import { useExchangeRatesData, useInvoiceListData } from "../redux/hooks";
 import GoToButton from "../UI/GoToButton";
 import { validateInvoice } from '../utils/validations';
 import showToast from '../utils/showToast.js';
@@ -20,6 +20,7 @@ import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { CATEGORIES } from "../constants/categories.js";
 import { updateBulkProducts } from "../redux/productsSlice.js";
 import { CURRENCIES_OPTIONS } from "../constants/currencies.js";
+import { getCurrencyExchangeRates } from "../redux/exchangeSlice.js";
 
 
 
@@ -34,6 +35,8 @@ const InvoiceForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [copyId, setCopyId] = useState("");
   const { getOneInvoice, listSize, invoiceList } = useInvoiceListData();
+
+  const { rates: exchangeRates } = useExchangeRatesData();
 
 
   const [formData, setFormData] = useState({
@@ -79,9 +82,12 @@ const InvoiceForm = () => {
 
 
 
-  // useEffect(() => {
-  //   handleCalculateTotal();
-  // }, []);
+  useEffect(() => {
+    dispatch(getCurrencyExchangeRates());
+  }, [dispatch]);
+
+  console.log("rates", exchangeRates);
+
 
   const handleRowDel = (itemToDelete) => {
     const updatedItems = formData.items.filter(
@@ -180,6 +186,8 @@ const InvoiceForm = () => {
   };
 
   const onCurrencyChange = (selectedOption) => {
+    // calculate the latest rates change from USD to selected currency option
+
     setFormData({ ...formData, currency: selectedOption.currency });
   };
 
