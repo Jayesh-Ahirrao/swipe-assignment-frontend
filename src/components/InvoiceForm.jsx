@@ -203,9 +203,6 @@ const InvoiceForm = () => {
             itemPrice: newPrice,
           }
         });
-
-        console.log("updated items", updatesItems);
-
         return {
           ...prev,
           items: updatesItems,
@@ -216,7 +213,7 @@ const InvoiceForm = () => {
       setFormData((prev) => {
         const updatedItems = prev.items.map((item) => {
           return {
-            ...item, 
+            ...item,
             itemPrice: item.USDPrice
           }
         });
