@@ -20,7 +20,7 @@ export const validateProduct = (product) => {
 
     else if (product.description.trim().length < 4) return new ValidationResponse("Please provide clear description of the product");
 
-    if (!product.price || product.price < 0.1) return new ValidationResponse("Price of the product must be between greater than 0.1");
+    if (!product.price || product.price < 0) return new ValidationResponse("Price of the product must be between greater than 0");
 
     return new ValidationResponse("Product added successfully", true);
 }
@@ -36,7 +36,7 @@ export const validateItem = (item) => {
 
     if (!item.itemDescription || item.itemDescription.length < 3) return new ValidationResponse("Provide valid description for an Product");
 
-    if (item.itemPrice < 0.1) return new ValidationResponse("Provide a price for an Product greater than 0.1");
+    if (item.itemPrice < 0) return new ValidationResponse("Provide a price for an Product greater than 0");
 
     if (item.itemQuantity < 1) return new ValidationResponse("Provide quantity for Product");
 

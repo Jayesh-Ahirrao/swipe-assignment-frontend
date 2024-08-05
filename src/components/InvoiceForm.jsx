@@ -131,7 +131,7 @@ const InvoiceForm = () => {
 
     setFormData((prevFormData) => {
       const dec_plcaes = prevFormData.currency.split(' ')[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
-      
+
       let subTotal = 0;
       // Adding goodsTotal and servicesTotal for grouping of bills
       let goodsTotal = 0;
@@ -245,11 +245,24 @@ const InvoiceForm = () => {
 
     // do mapping of items to products syntax
     const bulkUpdatingProducts = formData.items.map((item) => {
+      let PriceInUSD = parseFloat(item.itemPrice);
+
+      if (formData.currency !== BASE_CURRENCY && exchangeRates) {
+        // convert price back to base currency for data inside product to be consistent
+        const currencySymbol = formData.currency.split(" ")[1];
+        const rate = exchangeRates[currencySymbol];
+
+        if (rate) {
+          PriceInUSD = (PriceInUSD / rate).toFixed(2);
+        }
+
+      }
+
       return {
         name: item.itemName,
         id: item.itemId,
         description: item.itemDescription,
-        price: item.itemPrice,
+        price: PriceInUSD,
         category: item.category
       }
     });

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateBulkProducts, updateProduct } from "./productsSlice";
 import { CATEGORIES } from "../constants/categories";
+import { BITCOIN_CURRENCY, DECIMAL_PLACES } from "../constants/currencies";
 
 
 const invoicesSlice = createSlice({
@@ -75,13 +76,15 @@ const invoicesSlice = createSlice({
 
         state.forEach((invoice) => {
           // traverse their items and see if it matched with updated products
+          const dec_places = invoice.currency.split(' ')[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+
           invoice.items.forEach((item) => {
             const updatedProduct = productIdMapped[item.itemId];
 
 
             if (updatedProduct) {
               // means we need to  update this product
-              const prevItemCost = parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity, 10);
+              const prevItemCost = parseFloat(item.itemPrice) * parseInt(item.itemQuantity, 10);
 
 
               item.itemDescription = updatedProduct.description;
