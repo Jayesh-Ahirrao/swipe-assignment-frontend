@@ -30,6 +30,7 @@ const invoicesSlice = createSlice({
         const { product, exchangeRates } = action.payload;
 
         state.forEach((invoice, index) => {
+
           const productIndex = invoice.items.findIndex((record) => record.itemId === product.id);
           if (productIndex !== -1) {
             let currencyMultiplier = 1;
@@ -76,55 +77,70 @@ const invoicesSlice = createSlice({
       })
 
 
-      // .addCase(updateBulkProducts, (state, action) => {
-      //   if (!action.payload || !Array.isArray(action.payload)) return;
+      .addCase(updateBulkProducts, (state, action) => {
+        if (!action.payload || !Array.isArray(action.payload.bulkUpdatingProducts)) return;
 
-      //   // for easier retrival
-      //   const productIdMapped = action.payload.reduce((accumulator, product) => {
-      //     accumulator[product.id] = product
-      //     return accumulator;
-      //   }, {});
+        const { bulkUpdatingProducts, exchangeRates } = action.payload;
 
-      //   state.forEach((invoice) => {
-      //     // traverse their items and see if it matched with updated products
-      //     const dec_places = invoice.currency.split(' ')[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+        // for easier retrival
+        const productIdMapped = bulkUpdatingProducts.reduce((accumulator, product) => {
+          accumulator[product.id] = product
+          return accumulator;
+        }, {});
 
-      //     invoice.items.forEach((item) => {
-      //       const updatedProduct = productIdMapped[item.itemId];
+        state.forEach((invoice) => {
+          // traverse their items and see if it matched with updated products
+          const dec_places = invoice.currency.split(' ')[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+          let currencySymbol = invoice.currency.split(" ")[1];
+          let currencyMultiplier = 1;
+
+          if (invoice.currency !== BASE_CURRENCY) {
+            currencyMultiplier = exchangeRates[currencySymbol] || 1;
+          }
+
+          invoice.items.forEach((item) => {
+            const updatedProduct = productIdMapped[item.itemId];
+
+            if (updatedProduct) {
+              // means we need to  update this product
+              const prevItemCost = parseFloat(item.itemPrice) * parseInt(item.itemQuantity, 10);
+
+              const currItemCost = parseFloat(updatedProduct.price) * parseInt(item.itemQuantity, 10) * currencyMultiplier;
 
 
-      //       if (updatedProduct) {
-      //         // means we need to  update this product
-      //         const prevItemCost = parseFloat(item.itemPrice) * parseInt(item.itemQuantity, 10);
+              item.itemDescription = updatedProduct.description;
+              item.itemPrice = currItemCost.toFixed(dec_places);
+              item.category = updatedProduct.category;
+              item.itemName = updatedProduct.name;
 
 
-      //         item.itemDescription = updatedProduct.description;
-      //         item.itemPrice = updatedProduct.price;
-      //         item.category = updatedProduct.category;
-      //         item.itemName = updatedProduct.name;
+              console.log("product inside this invoice updated" , invoice.id);
+              console.log("Item" , item);
+              console.log("updatedProduct" , updateProduct);
 
-      //         const currItemCost = parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity, 10);
+              
 
-      //         invoice.subTotal = parseFloat((parseFloat(invoice.subTotal) || 0) + currItemCost - prevItemCost).toFixed(2);
-      //         if (updatedProduct.category === CATEGORIES.GOODS) {
-      //           invoice.goodsTotal = parseFloat((parseFloat(invoice.goodsTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString();
-      //         } else {
-      //           invoice.serviceTotal = parseFloat((parseFloat(invoice.serviceTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString();
-      //         }
+              invoice.subTotal = ((parseFloat(invoice.subTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
 
-      //         let taxRate = parseFloat(invoice.taxRate) || 0;
-      //         let discountRate = parseFloat(invoice.discountRate) || 0;
+              if (updatedProduct.category === CATEGORIES.GOODS) {
+                invoice.goodsTotal = ((parseFloat(invoice.goodsTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
+              } else {
+                invoice.serviceTotal = ((parseFloat(invoice.serviceTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
+              }
 
-      //         invoice.taxAmount = (parseFloat(invoice.subTotal) * (taxRate / 100)).toFixed(2).toString();
-      //         invoice.discountAmount = (parseFloat(invoice.subTotal) * (discountRate / 100)).toFixed(2).toString();
+              let taxRate = parseFloat(invoice.taxRate) || 0;
+              let discountRate = parseFloat(invoice.discountRate) || 0;
 
-      //         invoice.total = (parseFloat(invoice.subTotal) - parseFloat(invoice.discountAmount) + parseFloat(invoice.taxAmount)).toFixed(2).toString();
-      //       }
-      //     })
+              invoice.taxAmount = ((invoice.subTotal) * (taxRate / 100)).toFixed(dec_places);
+              invoice.discountAmount = ((invoice.subTotal) * (discountRate / 100)).toFixed(dec_places);
 
-      //   });
+              invoice.total = (parseFloat(invoice.subTotal) - parseFloat(invoice.discountAmount) + parseFloat(invoice.taxAmount)).toFixed(dec_places);
+            }
+          });
 
-      // });
+        });
+
+      });
   }
 });
 
