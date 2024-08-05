@@ -113,13 +113,6 @@ const invoicesSlice = createSlice({
               item.category = updatedProduct.category;
               item.itemName = updatedProduct.name;
 
-
-              console.log("product inside this invoice updated" , invoice.id);
-              console.log("Item" , item);
-              console.log("updatedProduct" , updateProduct);
-
-              
-
               invoice.subTotal = ((parseFloat(invoice.subTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
 
               if (updatedProduct.category === CATEGORIES.GOODS) {
