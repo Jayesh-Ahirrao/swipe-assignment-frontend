@@ -13,16 +13,17 @@ const productsSlice = createSlice({
             state.products = state.products.filter(product => product.id !== action.payload);
         },
         updateProduct: (state, action) => {
-            state.products = state.products.map(product => product.id === action.payload.id ? action.payload : product);
+            const { product } = action.payload;
+            state.products = state.products.map((record) => record.id === product.id ? product : record);
         },
         addProduct: (state, action) => {
             state.products.push(action.payload);
         },
         updateBulkProducts: (state, action) => {
             // build addition of products which can include both new and existing-updated-products
-            if (!action.payload || !Array.isArray(action.payload)) return;
-
-            action.payload.forEach((product) => {
+            if (!action.payload || !Array.isArray(action.payload.bulkUpdatingProducts)) return;
+            const { bulkUpdatingProducts } = action.payload;
+            bulkUpdatingProducts.forEach((product) => {
                 const existingRecordIndex = state.products.findIndex((record) => record.id === product.id);
                 if (existingRecordIndex !== -1) {
                     // if product already exists then update it 

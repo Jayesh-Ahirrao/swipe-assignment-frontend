@@ -120,7 +120,7 @@ const InvoiceRow = ({ invoice, navigate }) => {
       <td className="fw-normal">{invoice.billTo}</td>
       <td className="fw-normal">{invoice.dateOfIssue}</td>
       <td className="fw-normal">
-        {invoice.currency}
+        {invoice.currency}{" "}
         {invoice.total}
       </td>
       <td style={{ width: "5%" }}>

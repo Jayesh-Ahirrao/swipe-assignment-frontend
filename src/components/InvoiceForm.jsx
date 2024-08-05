@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
-import { useExchangeRatesData, useInvoiceListData } from "../redux/hooks";
+import { useExchangeRatesData, useInvoiceListData, useProductListData } from "../redux/hooks";
 import GoToButton from "../UI/GoToButton";
 import { validateInvoice } from '../utils/validations';
 import showToast from '../utils/showToast.js';
@@ -37,6 +37,7 @@ const InvoiceForm = () => {
   const { getOneInvoice, listSize, invoiceList } = useInvoiceListData();
 
   const { rates: exchangeRates } = useExchangeRatesData();
+  const { productsList } = useProductListData();
 
 
   const [formData, setFormData] = useState({
@@ -59,7 +60,7 @@ const InvoiceForm = () => {
     taxAmount: "0.00",
     discountRate: "",
     discountAmount: "0.00",
-    currency: "$",
+    currency: "$ USD",
     items: [],
   }
   );
@@ -79,6 +80,26 @@ const InvoiceForm = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    // update the USDPRIce as soon as form is mounted and depend on formdata
+    setFormData((prev) => {
+
+      const newItems = prev.items.map((item) => {
+        const productIndex = productsList.findIndex((product) => item.itemId == product.id);
+
+        return {
+          ...item,
+          USDPrice: productsList[productIndex].price,
+        }
+
+      });
+      return {
+        ...prev,
+        items : newItems,
+      }
+    });
+  }, [productsList]);
 
 
 
@@ -219,11 +240,11 @@ const InvoiceForm = () => {
         return {
           ...prev,
           items: updatedItems,
+          currency: selectedOption.currency
         }
       });
     }
     handleCalculateTotal();
-
   };
 
   const openModal = (event) => {
@@ -243,20 +264,24 @@ const InvoiceForm = () => {
       return;
     }
 
+    // Moving this outside to avoind performing split in each loop
+    const currencySymbol = formData.currency.split(" ")[1];
+
     // do mapping of items to products syntax
     const bulkUpdatingProducts = formData.items.map((item) => {
       let PriceInUSD = parseFloat(item.itemPrice);
 
       if (formData.currency !== BASE_CURRENCY && exchangeRates) {
         // convert price back to base currency for data inside product to be consistent
-        const currencySymbol = formData.currency.split(" ")[1];
         const rate = exchangeRates[currencySymbol];
+        const dec_plcaes = formData.currency.split(" ")[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES
 
         if (rate) {
-          PriceInUSD = (PriceInUSD / rate).toFixed(2);
+          PriceInUSD = (PriceInUSD / rate).toFixed(dec_plcaes);
         }
 
       }
+      console.log("Price in uUSD", PriceInUSD);
 
       return {
         name: item.itemName,
@@ -267,7 +292,7 @@ const InvoiceForm = () => {
       }
     });
 
-    dispatch(updateBulkProducts(bulkUpdatingProducts));
+    dispatch(updateBulkProducts({ bulkUpdatingProducts, exchangeRates }));
 
     if (isEdit) {
       dispatch(updateInvoice({ id: params.id, updatedInvoice: formData }));
