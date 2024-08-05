@@ -30,6 +30,7 @@ const invoicesSlice = createSlice({
         const { product, exchangeRates } = action.payload;
 
         state.forEach((invoice, index) => {
+
           const productIndex = invoice.items.findIndex((record) => record.itemId === product.id);
           if (productIndex !== -1) {
             let currencyMultiplier = 1;
@@ -43,22 +44,10 @@ const invoicesSlice = createSlice({
             const itemInsideInvoice = invoice.items[productIndex];
             const prevItemCost = parseFloat(itemInsideInvoice.itemPrice) * parseInt(itemInsideInvoice.itemQuantity, 10);
 
-            
 
             // only if product found update invoice based on new values
             // calculate data for curr item
             const currItemCost = parseFloat(product.price) * parseInt(itemInsideInvoice.itemQuantity, 10) * currencyMultiplier;
-
-            // this is to retain the quanity field which is present in items not in products
-            // TODO: this should be done after calculations
-
-            console.log('currencyMultiplier:', currencyMultiplier);
-            console.log('currency:', invoice.currency);
-            console.log('product.price:', product.price);
-            console.log('prevItemCost:', prevItemCost);
-            console.log('currItemCost:', currItemCost);
-
-
 
             invoice.items[productIndex] = {
               ...invoice.items[productIndex],
@@ -88,55 +77,63 @@ const invoicesSlice = createSlice({
       })
 
 
-      // .addCase(updateBulkProducts, (state, action) => {
-      //   if (!action.payload || !Array.isArray(action.payload)) return;
+      .addCase(updateBulkProducts, (state, action) => {
+        if (!action.payload || !Array.isArray(action.payload.bulkUpdatingProducts)) return;
 
-      //   // for easier retrival
-      //   const productIdMapped = action.payload.reduce((accumulator, product) => {
-      //     accumulator[product.id] = product
-      //     return accumulator;
-      //   }, {});
+        const { bulkUpdatingProducts, exchangeRates } = action.payload;
 
-      //   state.forEach((invoice) => {
-      //     // traverse their items and see if it matched with updated products
-      //     const dec_places = invoice.currency.split(' ')[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+        // for easier retrival
+        const productIdMapped = bulkUpdatingProducts.reduce((accumulator, product) => {
+          accumulator[product.id] = product
+          return accumulator;
+        }, {});
 
-      //     invoice.items.forEach((item) => {
-      //       const updatedProduct = productIdMapped[item.itemId];
+        state.forEach((invoice) => {
+          // traverse their items and see if it matched with updated products
+          const dec_places = invoice.currency.split(' ')[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+          let currencySymbol = invoice.currency.split(" ")[1];
+          let currencyMultiplier = 1;
+
+          if (invoice.currency !== BASE_CURRENCY) {
+            currencyMultiplier = exchangeRates[currencySymbol] || 1;
+          }
+
+          invoice.items.forEach((item) => {
+            const updatedProduct = productIdMapped[item.itemId];
+
+            if (updatedProduct) {
+              // means we need to  update this product
+              const prevItemCost = parseFloat(item.itemPrice) * parseInt(item.itemQuantity, 10);
+
+              const currItemCost = parseFloat(updatedProduct.price) * parseInt(item.itemQuantity, 10) * currencyMultiplier;
 
 
-      //       if (updatedProduct) {
-      //         // means we need to  update this product
-      //         const prevItemCost = parseFloat(item.itemPrice) * parseInt(item.itemQuantity, 10);
+              item.itemDescription = updatedProduct.description;
+              item.itemPrice = currItemCost.toFixed(dec_places);
+              item.category = updatedProduct.category;
+              item.itemName = updatedProduct.name;
 
+              invoice.subTotal = ((parseFloat(invoice.subTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
 
-      //         item.itemDescription = updatedProduct.description;
-      //         item.itemPrice = updatedProduct.price;
-      //         item.category = updatedProduct.category;
-      //         item.itemName = updatedProduct.name;
+              if (updatedProduct.category === CATEGORIES.GOODS) {
+                invoice.goodsTotal = ((parseFloat(invoice.goodsTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
+              } else {
+                invoice.serviceTotal = ((parseFloat(invoice.serviceTotal) || 0) + currItemCost - prevItemCost).toFixed(dec_places);
+              }
 
-      //         const currItemCost = parseFloat(item.itemPrice).toFixed(2) * parseInt(item.itemQuantity, 10);
+              let taxRate = parseFloat(invoice.taxRate) || 0;
+              let discountRate = parseFloat(invoice.discountRate) || 0;
 
-      //         invoice.subTotal = parseFloat((parseFloat(invoice.subTotal) || 0) + currItemCost - prevItemCost).toFixed(2);
-      //         if (updatedProduct.category === CATEGORIES.GOODS) {
-      //           invoice.goodsTotal = parseFloat((parseFloat(invoice.goodsTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString();
-      //         } else {
-      //           invoice.serviceTotal = parseFloat((parseFloat(invoice.serviceTotal) || 0) + currItemCost - prevItemCost).toFixed(2).toString();
-      //         }
+              invoice.taxAmount = ((invoice.subTotal) * (taxRate / 100)).toFixed(dec_places);
+              invoice.discountAmount = ((invoice.subTotal) * (discountRate / 100)).toFixed(dec_places);
 
-      //         let taxRate = parseFloat(invoice.taxRate) || 0;
-      //         let discountRate = parseFloat(invoice.discountRate) || 0;
+              invoice.total = (parseFloat(invoice.subTotal) - parseFloat(invoice.discountAmount) + parseFloat(invoice.taxAmount)).toFixed(dec_places);
+            }
+          });
 
-      //         invoice.taxAmount = (parseFloat(invoice.subTotal) * (taxRate / 100)).toFixed(2).toString();
-      //         invoice.discountAmount = (parseFloat(invoice.subTotal) * (discountRate / 100)).toFixed(2).toString();
+        });
 
-      //         invoice.total = (parseFloat(invoice.subTotal) - parseFloat(invoice.discountAmount) + parseFloat(invoice.taxAmount)).toFixed(2).toString();
-      //       }
-      //     })
-
-      //   });
-
-      // });
+      });
   }
 });
 
