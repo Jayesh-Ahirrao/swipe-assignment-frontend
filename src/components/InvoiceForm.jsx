@@ -19,7 +19,7 @@ import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { CATEGORIES } from "../constants/categories.js";
 import { updateBulkProducts } from "../redux/productsSlice.js";
-import { CURRENCIES_OPTIONS } from "../constants/currencies.js";
+import { BASE_CURRENCY, BITCOIN_CURRENCY, CURRENCIES_OPTIONS, DECIMAL_PLACES } from "../constants/currencies.js";
 import { getCurrencyExchangeRates } from "../redux/exchangeSlice.js";
 
 
@@ -86,8 +86,6 @@ const InvoiceForm = () => {
     dispatch(getCurrencyExchangeRates());
   }, [dispatch]);
 
-  console.log("rates", exchangeRates);
-
 
   const handleRowDel = (itemToDelete) => {
     const updatedItems = formData.items.filter(
@@ -107,6 +105,7 @@ const InvoiceForm = () => {
       itemPrice: "1.00",
       itemQuantity: 1,
       category: "", //you can keep goods as a default category
+      USDPrice: "",
     };
 
     // we are utilizing this fn for both user input details and autifill details from existing products
@@ -117,16 +116,19 @@ const InvoiceForm = () => {
       newItem.itemDescription = selectedProduct.description;
       newItem.itemPrice = selectedProduct.price;
       newItem.category = selectedProduct.category;
+      newItem.USDPrice = selectedProduct.price;
     }
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       items: [...prevFormData.items, newItem],
     }));
+
     handleCalculateTotal();
   };
 
   const handleCalculateTotal = () => {
+
     setFormData((prevFormData) => {
       let subTotal = 0;
       // Adding goodsTotal and servicesTotal for grouping of bills
@@ -187,8 +189,46 @@ const InvoiceForm = () => {
 
   const onCurrencyChange = (selectedOption) => {
     // calculate the latest rates change from USD to selected currency option
+    if (exchangeRates && selectedOption.currency !== BASE_CURRENCY) {
 
-    setFormData({ ...formData, currency: selectedOption.currency });
+      const currencySymbol = selectedOption.currency.split(' ')[1];
+      let dec_plcaed = currencySymbol === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+
+      setFormData((prev) => {
+        const updatesItems = prev.items.map((item) => {
+          const newPrice = (parseFloat(item.USDPrice) * exchangeRates[currencySymbol]).toFixed(dec_plcaed);
+
+          return {
+            ...item,
+            itemPrice: newPrice,
+          }
+        });
+
+        console.log("updated items", updatesItems);
+
+        return {
+          ...prev,
+          items: updatesItems,
+          currency: selectedOption.currency
+        }
+      });
+    } else {
+      setFormData((prev) => {
+        const updatedItems = prev.items.map((item) => {
+          return {
+            ...item, 
+            itemPrice: item.USDPrice
+          }
+        });
+
+        return {
+          ...prev,
+          items: updatedItems,
+        }
+      });
+    }
+    handleCalculateTotal();
+
   };
 
   const openModal = (event) => {

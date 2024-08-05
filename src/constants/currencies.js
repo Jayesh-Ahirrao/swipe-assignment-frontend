@@ -16,9 +16,12 @@ export const CURRENCIES_OPTIONS = [
     { symbol: "$ USD", name: "USD (United States Dollar)" },
     { symbol: "£ GBP", name: "GBP (British Pound Sterling)" },
     { symbol: "¥ JPY", name: "JPY (Japanese Yen)" },
-    { symbol: "CAD $", name: "CAD (Canadian Dollar)" },
-    { symbol: "AUD $", name: "AUD (Australian Dollar)" },
-    { symbol: "SGD $", name: "SGD (Singapore Dollar)" },
+    { symbol: "$ CAD", name: "CAD (Canadian Dollar)" },
+    { symbol: "$ AUD", name: "AUD (Australian Dollar)" },
+    { symbol: "$ SGD", name: "SGD (Singapore Dollar)" },
     { symbol: "¥ CNY", name: "CNY (Chinese Renminbi)" },
     { symbol: "₿ BTC", name: "BTC (Bitcoin)" },
 ];
+
+export const BASE_CURRENCY = "$ USD";
+export const BITCOIN_CURRENCY = "BTC";

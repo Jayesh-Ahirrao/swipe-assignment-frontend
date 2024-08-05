@@ -36,7 +36,6 @@ const InvoiceItem = (props) => {
     if(selectedProduct) {
       onRowAdd(selectedProduct);
     }
-
   } ,[]);
 
   return (

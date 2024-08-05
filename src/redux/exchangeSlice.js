@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API_ENDPOINTS, CURRENCIES_OPTIONS, DECIMAL_PLACES } from "../constants/currencies";
+import { API_ENDPOINTS, DECIMAL_PLACES } from "../constants/currencies";
 
 
 /**
