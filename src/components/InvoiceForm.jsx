@@ -274,10 +274,8 @@ const InvoiceForm = () => {
       if (formData.currency !== BASE_CURRENCY && exchangeRates) {
         // convert price back to base currency for data inside product to be consistent
         const rate = exchangeRates[currencySymbol];
-        const dec_plcaes = formData.currency.split(" ")[1] === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES
-
         if (rate) {
-          PriceInUSD = (PriceInUSD / rate).toFixed(dec_plcaes);
+          PriceInUSD = (PriceInUSD / rate).toFixed(2);
         }
 
       }
