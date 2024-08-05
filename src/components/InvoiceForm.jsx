@@ -281,7 +281,6 @@ const InvoiceForm = () => {
         }
 
       }
-      console.log("Price in uUSD", PriceInUSD);
 
       return {
         name: item.itemName,

@@ -43,22 +43,10 @@ const invoicesSlice = createSlice({
             const itemInsideInvoice = invoice.items[productIndex];
             const prevItemCost = parseFloat(itemInsideInvoice.itemPrice) * parseInt(itemInsideInvoice.itemQuantity, 10);
 
-            
 
             // only if product found update invoice based on new values
             // calculate data for curr item
             const currItemCost = parseFloat(product.price) * parseInt(itemInsideInvoice.itemQuantity, 10) * currencyMultiplier;
-
-            // this is to retain the quanity field which is present in items not in products
-            // TODO: this should be done after calculations
-
-            console.log('currencyMultiplier:', currencyMultiplier);
-            console.log('currency:', invoice.currency);
-            console.log('product.price:', product.price);
-            console.log('prevItemCost:', prevItemCost);
-            console.log('currItemCost:', currItemCost);
-
-
 
             invoice.items[productIndex] = {
               ...invoice.items[productIndex],
