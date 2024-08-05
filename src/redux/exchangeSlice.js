@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API_ENDPOINTS, DECIMAL_PLACES } from "../constants/currencies";
+import { API_ENDPOINTS, DECIMAL_PLACES, DUMMYEXCHANGERATES } from "../constants/currencies";
 
 
 /**
@@ -25,12 +25,10 @@ export const getCurrencyExchangeRates = createAsyncThunk("exchange/getExchangeRa
     const CurrencyRatesResponse = await fetch(API_ENDPOINTS.CURRENCIES);
     const CurrencyRatesData = await CurrencyRatesResponse.json();
 
-    // const BitcoinRatesResponse = await fetch(API_ENDPOINTS.CRYPTO);
-    // const cryptoData = await BitcoinRatesResponse.json();
+    const BitcoinRatesResponse = await fetch(API_ENDPOINTS.CRYPTO);
+    const cryptoData = await BitcoinRatesResponse.json();
 
-    // const USDtoBITCOINRate = parseFloat(1 / cryptoData.bitcoin.usd).toFixed(DECIMAL_PLACES.BITCOIN);
-    const USDtoBITCOINRate = 0.000019; //mocking as req to coingeko are over
-
+    const USDtoBITCOINRate = parseFloat(1 / cryptoData.bitcoin.usd).toFixed(DECIMAL_PLACES.BITCOIN);
 
     return {
         ...CurrencyRatesData.rates,
@@ -58,6 +56,7 @@ const exchangeSlice = createSlice({
         }).addCase(getCurrencyExchangeRates.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
+            state.rates = {...DUMMYEXCHANGERATES} //fallback rates on api errro
         })
 
     }
