@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import GoToButton from '../UI/GoToButton';
-import { useProductListData } from '../redux/hooks';
+import { useExchangeRatesData, useProductListData } from '../redux/hooks';
 import ProductCard from '../components/ProductCard';
 import { useDispatch } from 'react-redux';
 import { deleteProduct, updateProduct, addProduct } from '../redux/productsSlice';
@@ -10,10 +10,13 @@ import { validateProduct } from '../utils/validations.js'
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { v4 } from 'uuid';
+import { getCurrencyExchangeRates } from "../redux/exchangeSlice.js";
+
 
 
 const ProductsDetails = () => {
     const [showModal, setShowModal] = useState(false);
+    const { rates: exchangeRates } = useExchangeRatesData();
 
     const { productsList } = useProductListData();
     const dispatch = useDispatch(); //stable ==> doesn't change between renders
@@ -24,8 +27,8 @@ const ProductsDetails = () => {
     }, [dispatch]);
 
     const handleEdit = useCallback((product) => {
-        dispatch(updateProduct(product));
-    }, [dispatch]);
+        dispatch(updateProduct({ product, exchangeRates }));
+    }, [dispatch, exchangeRates]);
 
     const handleModalClose = useCallback(() => {
         setShowModal(false);
@@ -39,7 +42,7 @@ const ProductsDetails = () => {
             return;
         }
         // This component is used for new product and existing product hence to enforce id doing tihs
-        const finalProd = product.id ? {...product} :  { ...product, id: v4() };
+        const finalProd = product.id ? { ...product } : { ...product, id: v4() };
 
         dispatch(addProduct(finalProd));
         showToast("Product saved", TOASTVARIANTS.success);
@@ -49,6 +52,10 @@ const ProductsDetails = () => {
     const handleAddProduct = useCallback(() => {
         setShowModal(true);
     }, []);
+
+    useEffect(() => {
+        dispatch(getCurrencyExchangeRates());
+    }, [dispatch]);
 
     return (
         <div className='productsPage w-100'>
