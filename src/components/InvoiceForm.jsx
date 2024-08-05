@@ -12,13 +12,15 @@ import { useDispatch } from "react-redux";
 import { addInvoice, updateInvoice } from "../redux/invoicesSlice";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import generateRandomId from "../utils/generateRandomId";
-import { useInvoiceListData } from "../redux/hooks";
+import { useExchangeRatesData, useInvoiceListData } from "../redux/hooks";
 import GoToButton from "../UI/GoToButton";
 import { validateInvoice } from '../utils/validations';
 import showToast from '../utils/showToast.js';
 import { TOASTVARIANTS } from '../constants/toastVariants.js';
 import { CATEGORIES } from "../constants/categories.js";
 import { updateBulkProducts } from "../redux/productsSlice.js";
+import { BASE_CURRENCY, BITCOIN_CURRENCY, CURRENCIES_OPTIONS, DECIMAL_PLACES } from "../constants/currencies.js";
+import { getCurrencyExchangeRates } from "../redux/exchangeSlice.js";
 
 
 
@@ -34,9 +36,11 @@ const InvoiceForm = () => {
   const [copyId, setCopyId] = useState("");
   const { getOneInvoice, listSize, invoiceList } = useInvoiceListData();
 
+  const { rates: exchangeRates } = useExchangeRatesData();
+
 
   const [formData, setFormData] = useState({
-    id: generateRandomId(), 
+    id: generateRandomId(),
     currentDate: new Date().toLocaleDateString(),
     invoiceNumber: listSize + 1,
     dateOfIssue: "",
@@ -78,15 +82,16 @@ const InvoiceForm = () => {
 
 
 
-  // useEffect(() => {
-  //   handleCalculateTotal();
-  // }, []);
+  useEffect(() => {
+    dispatch(getCurrencyExchangeRates());
+  }, [dispatch]);
+
 
   const handleRowDel = (itemToDelete) => {
     const updatedItems = formData.items.filter(
       (item) => item.itemId !== itemToDelete.itemId
     );
-    setFormData((prevFormData) => ({  ...prevFormData, items: updatedItems }));
+    setFormData((prevFormData) => ({ ...prevFormData, items: updatedItems }));
     handleCalculateTotal();
   };
 
@@ -100,6 +105,7 @@ const InvoiceForm = () => {
       itemPrice: "1.00",
       itemQuantity: 1,
       category: "", //you can keep goods as a default category
+      USDPrice: "",
     };
 
     // we are utilizing this fn for both user input details and autifill details from existing products
@@ -110,16 +116,19 @@ const InvoiceForm = () => {
       newItem.itemDescription = selectedProduct.description;
       newItem.itemPrice = selectedProduct.price;
       newItem.category = selectedProduct.category;
+      newItem.USDPrice = selectedProduct.price;
     }
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       items: [...prevFormData.items, newItem],
     }));
+
     handleCalculateTotal();
   };
 
   const handleCalculateTotal = () => {
+
     setFormData((prevFormData) => {
       let subTotal = 0;
       // Adding goodsTotal and servicesTotal for grouping of bills
@@ -179,7 +188,44 @@ const InvoiceForm = () => {
   };
 
   const onCurrencyChange = (selectedOption) => {
-    setFormData({ ...formData, currency: selectedOption.currency });
+    // calculate the latest rates change from USD to selected currency option
+    if (exchangeRates && selectedOption.currency !== BASE_CURRENCY) {
+
+      const currencySymbol = selectedOption.currency.split(' ')[1];
+      let dec_plcaed = currencySymbol === BITCOIN_CURRENCY ? DECIMAL_PLACES.BITCOIN : DECIMAL_PLACES.CURRENCIES;
+
+      setFormData((prev) => {
+        const updatesItems = prev.items.map((item) => {
+          const newPrice = (parseFloat(item.USDPrice) * exchangeRates[currencySymbol]).toFixed(dec_plcaed);
+
+          return {
+            ...item,
+            itemPrice: newPrice,
+          }
+        });
+        return {
+          ...prev,
+          items: updatesItems,
+          currency: selectedOption.currency
+        }
+      });
+    } else {
+      setFormData((prev) => {
+        const updatedItems = prev.items.map((item) => {
+          return {
+            ...item,
+            itemPrice: item.USDPrice
+          }
+        });
+
+        return {
+          ...prev,
+          items: updatedItems,
+        }
+      });
+    }
+    handleCalculateTotal();
+
   };
 
   const openModal = (event) => {
@@ -365,7 +411,7 @@ const InvoiceForm = () => {
                 <div className="d-flex flex-row align-items-start justify-content-between">
                   <span className="fw-bold">Subtotal:</span>
                   <span>
-                    {formData.currency}
+                    {formData.currency}{":  "}
                     {formData.subTotal}
                   </span>
                 </div>
@@ -373,17 +419,17 @@ const InvoiceForm = () => {
                   <span className="fw-bold">Discount:</span>
                   <span>
                     <span className="small">
-                      ({formData.discountRate || 0}%)
+                      ({formData.discountRate || 0}%){" "}
                     </span>
-                    {formData.currency}
+                    {formData.currency}{": "}
                     {formData.discountAmount || 0}
                   </span>
                 </div>
                 <div className="d-flex flex-row align-items-start justify-content-between mt-2">
                   <span className="fw-bold">Tax:</span>
                   <span>
-                    <span className="small">({formData.taxRate || 0}%)</span>
-                    {formData.currency}
+                    <span className="small">({formData.taxRate || 0}%){" "}</span>
+                    {formData.currency}{":  "}
                     {formData.taxAmount || 0}
                   </span>
                 </div>
@@ -394,7 +440,7 @@ const InvoiceForm = () => {
                 >
                   <span className="fw-bold">Total:</span>
                   <span className="fw-bold">
-                    {formData.currency}
+                    {formData.currency}{":  "}
                     {formData.total || 0}
                   </span>
                 </div>
@@ -469,14 +515,13 @@ const InvoiceForm = () => {
                 className="btn btn-light my-1"
                 aria-label="Change Currency"
               >
-                <option value="$">USD (United States Dollar)</option>
-                <option value="£">GBP (British Pound Sterling)</option>
-                <option value="¥">JPY (Japanese Yen)</option>
-                <option value="$">CAD (Canadian Dollar)</option>
-                <option value="$">AUD (Australian Dollar)</option>
-                <option value="$">SGD (Singapore Dollar)</option>
-                <option value="¥">CNY (Chinese Renminbi)</option>
-                <option value="₿">BTC (Bitcoin)</option>
+                {
+                  CURRENCIES_OPTIONS.map((currency) => {
+                    return (
+                      <option value={currency.symbol} key={currency.symbol}>{currency.name}</option>
+                    )
+                  })
+                }
               </Form.Select>
             </Form.Group>
             <Form.Group className="my-3">
