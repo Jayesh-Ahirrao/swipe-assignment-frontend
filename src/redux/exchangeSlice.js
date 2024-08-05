@@ -25,10 +25,12 @@ export const getCurrencyExchangeRates = createAsyncThunk("exchange/getExchangeRa
     const CurrencyRatesResponse = await fetch(API_ENDPOINTS.CURRENCIES);
     const CurrencyRatesData = await CurrencyRatesResponse.json();
 
-    const BitcoinRatesResponse = await fetch(API_ENDPOINTS.CRYPTO);
-    const cryptoData = await BitcoinRatesResponse.json();
+    // const BitcoinRatesResponse = await fetch(API_ENDPOINTS.CRYPTO);
+    // const cryptoData = await BitcoinRatesResponse.json();
 
-    const USDtoBITCOINRate = parseFloat(1 / cryptoData.bitcoin.usd).toFixed(DECIMAL_PLACES.BITCOIN);
+    // const USDtoBITCOINRate = parseFloat(1 / cryptoData.bitcoin.usd).toFixed(DECIMAL_PLACES.BITCOIN);
+    const USDtoBITCOINRate = 0.000019; //mocking as req to coingeko are over
+
 
     return {
         ...CurrencyRatesData.rates,
