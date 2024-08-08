@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import { BiSolidPencil, BiTrash } from "react-icons/bi";
 import { BsEyeFill } from "react-icons/bs";
@@ -9,22 +9,23 @@ import { useDispatch } from "react-redux";
 import { deleteInvoice } from "../redux/invoicesSlice";
 import GoToButton from "../UI/GoToButton";
 import showToast from '../utils/showToast.js'
+import InvoiceCopyInput from "../components/InvoiceCopyInput.jsx";
 
 const InvoiceList = () => {
   const { invoiceList, getOneInvoice } = useInvoiceListData();
   const isListEmpty = invoiceList.length === 0;
 
-  const [copyId, setCopyId] = useState("");
+  console.log("InvoiceList", invoiceList);
   const navigate = useNavigate();
 
-  const handleCopyClick = () => {
+  const handleCopyClick = useCallback((copyId) => {
     const invoice = getOneInvoice(copyId);
     if (!invoice) {
       showToast("Please enter the valid invoice id.");
     } else {
       navigate(`/create/${copyId}`);
     }
-  };
+  }, [getOneInvoice, navigate]);
 
   return (
     <Row>
@@ -49,20 +50,7 @@ const InvoiceList = () => {
                 </div>
 
                 <div className="d-flex gap-2">
-                  <Button variant="dark mb-2 mb-md-4" onClick={handleCopyClick}>
-                    Copy Invoice
-                  </Button>
-
-                  <input
-                    type="text"
-                    value={copyId}
-                    onChange={(e) => setCopyId(e.target.value)}
-                    placeholder="Enter Invoice ID to copy"
-                    className="bg-white border"
-                    style={{
-                      height: "50px",
-                    }}
-                  />
+                  <InvoiceCopyInput handleCopyClick={handleCopyClick} invoiceList={invoiceList} />
                 </div>
               </div>
               <Table responsive>
