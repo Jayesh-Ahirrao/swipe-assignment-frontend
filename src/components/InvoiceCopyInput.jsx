@@ -24,6 +24,11 @@ const InvoiceCopyInput = ({ invoiceList, handleCopyClick }) => {
                     height: "50px",
                 }}
             />
+            <datalist id="copyInvoiceInput">
+                {invoiceList &&
+                    invoiceList.map((invoice) => <option key={invoice.id} value={invoice.id}></option>)
+                }
+            </datalist>
         </div>
     )
 }
